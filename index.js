@@ -92,17 +92,20 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
         filtersSection.style.display = "block"; // Show the filters section
 
-        // Populate filters select dropdown
+        // Populate filters select dropdown with a placeholder
         if (
           selectedStrategyData.filters &&
           Array.isArray(selectedStrategyData.filters)
         ) {
-          filtersSelect.innerHTML = selectedStrategyData.filters
-            .map(
-              (filter, index) =>
-                `<option value="${index}">${filter.filter}</option>`
-            )
-            .join("");
+          filtersSelect.innerHTML = `
+            <option value="" disabled selected>Select Filter</option>
+            ${selectedStrategyData.filters
+              .map(
+                (filter, index) =>
+                  `<option value="${index}">${filter.filter}</option>`
+              )
+              .join("")}
+          `;
         } else {
           filtersSelect.innerHTML =
             '<option value="" disabled>No filters available</option>';
