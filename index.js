@@ -1,9 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const selectElement = document.getElementById("strategy-name");
+  const strategySelect = document.getElementById("strategy-name");
   const universeSelect = document.getElementById("universe");
   const classSelect = document.getElementById("class");
   const filtersButton = document.getElementById("filters-button");
+  const filtersDiv = document.getElementById("filters");
   const detailsDiv = document.getElementById("details");
+
+  let selectedStrategyData = null;
 
   // Fetch JSON data
   fetch("./stratergydata.json")
@@ -14,64 +17,99 @@ document.addEventListener("DOMContentLoaded", function () {
         const option = document.createElement("option");
         option.value = name;
         option.textContent = name;
-        selectElement.appendChild(option);
+        strategySelect.appendChild(option);
       }
 
       // Handle strategy selection change
-      selectElement.addEventListener("change", function () {
-        const selectedStrategy = data[this.value];
-        if (selectedStrategy) {
+      strategySelect.addEventListener("change", function () {
+        selectedStrategyData = data[this.value];
+        if (selectedStrategyData) {
+          // Enable the universe select field
+          universeSelect.disabled = false;
+
           // Populate universe select options
           universeSelect.innerHTML =
             '<option value="" disabled selected>Select Universe</option>';
           const universeOption = document.createElement("option");
-          universeOption.value = selectedStrategy.universe;
-          universeOption.textContent = selectedStrategy.universe;
+          universeOption.value = selectedStrategyData.universe;
+          universeOption.textContent = selectedStrategyData.universe;
           universeSelect.appendChild(universeOption);
+
+          // Reset class and filters
+          classSelect.disabled = true;
+          classSelect.innerHTML =
+            '<option value="" disabled selected>Select Class</option>';
+          filtersButton.style.display = "none";
+          filtersDiv.style.display = "none";
+          detailsDiv.innerHTML = ""; // Clear details
+        }
+      });
+
+      // Handle universe selection change
+      universeSelect.addEventListener("change", function () {
+        if (selectedStrategyData) {
+          // Enable the class select field
+          classSelect.disabled = false;
 
           // Populate class select options
           classSelect.innerHTML =
             '<option value="" disabled selected>Select Class</option>';
           const classOption = document.createElement("option");
-          classOption.value = selectedStrategy.class;
-          classOption.textContent = selectedStrategy.class || "N/A";
+          classOption.value = selectedStrategyData.class;
+          classOption.textContent = selectedStrategyData.class || "N/A";
           classSelect.appendChild(classOption);
-
-          // Show filters button if class is "N/A"
-          filtersButton.style.display = selectedStrategy.class
-            ? "none"
-            : "block";
-        } else {
-          universeSelect.innerHTML =
-            '<option value="" disabled selected>Select Universe</option>';
-          classSelect.innerHTML =
-            '<option value="" disabled selected>Select Class</option>';
-          filtersButton.style.display = "none";
         }
+      });
 
-        // Display strategy details
-        detailsDiv.innerHTML = `
-          <h2>Details for ${this.value}</h2>
-          <p><strong>Class:</strong> ${selectedStrategy.class || "N/A"}</p>
-          <p><strong>Universe:</strong> ${selectedStrategy.universe}</p>
-          <div>
-            ${
-              selectedStrategy.filters
-                ? "<h3>Filters:</h3>" +
-                  selectedStrategy.filters
-                    .map(
-                      (filter) => `
-                        <div>
-                          <strong>${filter.filter}:</strong>
-                          <pre>${JSON.stringify(filter.options, null, 2)}</pre>
-                        </div>
-                      `
-                    )
-                    .join("")
-                : ""
-            }
-          </div>
-        `;
+      // Handle class selection change
+      classSelect.addEventListener("change", function () {
+        if (this.value === "N/A") {
+          // Show filters button and reset filters section
+          filtersButton.style.display = "block";
+          filtersDiv.style.display = "none";
+          filtersDiv.innerHTML = "";
+        } else {
+          // Hide filters button if class is selected
+          filtersButton.style.display = "none";
+          filtersDiv.style.display = "none";
+          filtersDiv.innerHTML = "";
+
+          // Show strategy details
+          detailsDiv.innerHTML = `
+            <h2>Details for ${strategySelect.value}</h2>
+            <p><strong>Class:</strong> ${
+              selectedStrategyData.class || "N/A"
+            }</p>
+            <p><strong>Universe:</strong> ${selectedStrategyData.universe}</p>
+          `;
+        }
+      });
+
+      // Handle filters button click
+      filtersButton.addEventListener("click", function (e) {
+        e.preventDefault();
+        filtersDiv.style.display = "block";
+
+        // Populate filters section
+        filtersDiv.innerHTML = selectedStrategyData.filters
+          ? selectedStrategyData.filters
+              .map(
+                (filter) => `
+                <div class="form-group">
+                  <label for="${filter.filter}">${filter.filter}</label>
+                  <select id="${filter.filter}">
+                    ${filter.options
+                      .map(
+                        (option) =>
+                          `<option value="${option}">${option}</option>`
+                      )
+                      .join("")}
+                  </select>
+                </div>
+              `
+              )
+              .join("")
+          : "<p>No filters available for this strategy.</p>";
       });
     })
     .catch((error) => console.error("Error fetching the JSON file:", error));

@@ -18,19 +18,22 @@
         </div>
         <div class="form-group">
           <label for="universe">Universe</label>
-          <select id="universe">
+          <select id="universe" disabled>
             <option value="" disabled selected>Select Universe</option>
           </select>
         </div>
         <div class="form-group">
           <label for="class">Class</label>
-          <select id="class">
+          <select id="class" disabled>
             <option value="" disabled selected>Select Class</option>
           </select>
         </div>
         <button id="filters-button" class="submit-button" style="display: none">
           Filters
         </button>
+        <div id="filters" style="display: none">
+          <!-- Filters will be dynamically added here -->
+        </div>
         <div id="details">
           <!-- Strategy details will be displayed here -->
         </div>
