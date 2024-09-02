@@ -12,17 +12,25 @@
       <form id="strategyForm">
         <div class="form-group">
           <label for="strategy-name">Strategy Name</label>
-          <select id="strategy-name"></select>
+          <select id="strategy-name">
+            <option value="" disabled selected>Select Strategy</option>
+          </select>
         </div>
         <div class="form-group">
           <label for="universe">Universe</label>
-          <select id="universe"></select>
+          <select id="universe">
+            <option value="" disabled selected>Select Universe</option>
+          </select>
         </div>
         <div class="form-group">
           <label for="class">Class</label>
-          <select id="class"></select>
+          <select id="class">
+            <option value="" disabled selected>Select Class</option>
+          </select>
         </div>
-        <button id="filters-button" class="submit-button" style="display:none;">Filters</button>
+        <button id="filters-button" class="submit-button" style="display: none">
+          Filters
+        </button>
         <div id="details">
           <!-- Strategy details will be displayed here -->
         </div>

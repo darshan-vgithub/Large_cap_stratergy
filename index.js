@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch("./stratergydata.json")
     .then((response) => response.json())
     .then((data) => {
-      // Populate Strategy Name select options
+      // Populate strategy select options
       for (const [name, strategy] of Object.entries(data)) {
         const option = document.createElement("option");
         option.value = name;
@@ -17,62 +17,61 @@ document.addEventListener("DOMContentLoaded", function () {
         selectElement.appendChild(option);
       }
 
-      // Handle Strategy Name selection change
+      // Handle strategy selection change
       selectElement.addEventListener("change", function () {
         const selectedStrategy = data[this.value];
-
         if (selectedStrategy) {
-          // Populate Universe select options
-          universeSelect.innerHTML = `<option value="">Select Universe</option>`;
-          universeSelect.innerHTML += `<option value="${selectedStrategy.universe}">${selectedStrategy.universe}</option>`;
+          // Populate universe select options
+          universeSelect.innerHTML =
+            '<option value="" disabled selected>Select Universe</option>';
+          const universeOption = document.createElement("option");
+          universeOption.value = selectedStrategy.universe;
+          universeOption.textContent = selectedStrategy.universe;
+          universeSelect.appendChild(universeOption);
 
-          // Populate Class select options
-          classSelect.innerHTML = `<option value="">Select Class</option>`;
-          if (selectedStrategy.class) {
-            classSelect.innerHTML += `<option value="${selectedStrategy.class}">${selectedStrategy.class}</option>`;
-          } else {
-            classSelect.innerHTML += `<option value="null">No Class (null)</option>`;
-          }
+          // Populate class select options
+          classSelect.innerHTML =
+            '<option value="" disabled selected>Select Class</option>';
+          const classOption = document.createElement("option");
+          classOption.value = selectedStrategy.class;
+          classOption.textContent = selectedStrategy.class || "N/A";
+          classSelect.appendChild(classOption);
 
-          detailsDiv.innerHTML = `
-            <h2>Details for ${this.value}</h2>
-            <p><strong>Class:</strong> ${selectedStrategy.class || "N/A"}</p>
-            <p><strong>Universe:</strong> ${selectedStrategy.universe}</p>
-          `;
+          // Show filters button if class is "N/A"
+          filtersButton.style.display = selectedStrategy.class
+            ? "none"
+            : "block";
         } else {
-          detailsDiv.innerHTML = "Please select a strategy.";
-        }
-      });
-
-      // Handle Class selection change
-      classSelect.addEventListener("change", function () {
-        if (this.value === "null") {
-          filtersButton.style.display = "block";
-        } else {
+          universeSelect.innerHTML =
+            '<option value="" disabled selected>Select Universe</option>';
+          classSelect.innerHTML =
+            '<option value="" disabled selected>Select Class</option>';
           filtersButton.style.display = "none";
         }
-      });
 
-      // Handle Filters button click
-      filtersButton.addEventListener("click", function (e) {
-        e.preventDefault();
-        const selectedStrategy = data[selectElement.value];
-        if (selectedStrategy && selectedStrategy.filters) {
-          detailsDiv.innerHTML += `
-            <div>
-              <h3>Filters:</h3>
-              ${selectedStrategy.filters
-                .map(
-                  (filter) => `
-                  <div>
-                    <strong>${filter.filter}:</strong>
-                    <pre>${JSON.stringify(filter.options, null, 2)}</pre>
-                  </div>`
-                )
-                .join("")}
-            </div>
-          `;
-        }
+        // Display strategy details
+        detailsDiv.innerHTML = `
+          <h2>Details for ${this.value}</h2>
+          <p><strong>Class:</strong> ${selectedStrategy.class || "N/A"}</p>
+          <p><strong>Universe:</strong> ${selectedStrategy.universe}</p>
+          <div>
+            ${
+              selectedStrategy.filters
+                ? "<h3>Filters:</h3>" +
+                  selectedStrategy.filters
+                    .map(
+                      (filter) => `
+                        <div>
+                          <strong>${filter.filter}:</strong>
+                          <pre>${JSON.stringify(filter.options, null, 2)}</pre>
+                        </div>
+                      `
+                    )
+                    .join("")
+                : ""
+            }
+          </div>
+        `;
       });
     })
     .catch((error) => console.error("Error fetching the JSON file:", error));
