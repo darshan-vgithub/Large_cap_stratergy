@@ -1,0 +1,490 @@
+{
+  "cruise": {
+    "class": "CruiseMomentum",
+    "universe": "Mcap_500"
+  },
+  "finance": {
+    "class": null,
+    "universe": "Nifty_Finance",
+    "filters": [
+      {
+        "filter": "McapFilter",
+        "options": {
+          "min_market_cap": 2500
+        }
+      },
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 252,
+          "return_size": 50
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 252,
+          "positive_return_size": 10
+        }
+      }
+    ]
+  },
+  "healthcare": {
+    "class": null,
+    "universe": "Nifty_Healthcare",
+    "filters": [
+      {
+        "filter": "McapFilter",
+        "options": {
+          "min_market_cap": 2500
+        }
+      },
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 252,
+          "return_size": 50
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 252,
+          "positive_return_size": 10
+        }
+      }
+    ]
+  },
+  "largecap": {
+    "class": null,
+    "universe": "Mcap_100",
+    "filters": [
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 252,
+          "return_size": 40
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 252,
+          "positive_return_size": 15
+        }
+      }
+    ]
+  },
+  "multicap": {
+    "class": null,
+    "universe": "Mcap_500",
+    "filters": [
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 252,
+          "return_size": 100
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 252,
+          "positive_return_size": 50
+        }
+      }
+    ]
+  },
+  "mnc": {
+    "class": null,
+    "universe": "Nifty_Mnc",
+    "filters": [
+      {
+        "filter": "McapFilter",
+        "options": {
+          "min_market_cap": 1000
+        }
+      },
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 252,
+          "return_size": 50
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 252,
+          "positive_return_size": 10
+        }
+      }
+    ]
+  },
+  "risk_tuned_adaptive_etf": {
+    "class": null,
+    "universe": "Risk_Tuned_Adaptive_ETF",
+    "filters": [
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "return_size": 2
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "positive_return_size": 2
+        }
+      }
+    ]
+  },
+  "dynamic_focussed_asset_etf": {
+    "class": null,
+    "universe": "Dynamic_Focussed_Asset_ETF",
+    "filters": [
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "return_size": 2
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "positive_return_size": 2
+        }
+      }
+    ]
+  },
+  "sector_rotation_etf": {
+    "class": null,
+    "universe": "Sector_Rotation_ETF",
+    "filters": [
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "return_size": 2
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "positive_return_size": 2
+        }
+      }
+    ]
+  },
+  "commodities_etf": {
+    "class": null,
+    "universe": "Commodities_ETF",
+    "filters": [
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "return_size": 2
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "positive_return_size": 2
+        }
+      }
+    ]
+  },
+  "intl_etf": {
+    "class": null,
+    "universe": "Intl_ETF",
+    "filters": [
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "return_size": 2
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "positive_return_size": 2
+        }
+      }
+    ]
+  },
+  "factor_etf": {
+    "class": null,
+    "universe": "Factor_ETF",
+    "filters": [
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "return_size": 2
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "positive_return_size": 2
+        }
+      }
+    ]
+  },
+  "technology_sector": {
+    "class": null,
+    "universe": "Technology_Sector",
+    "filters": [
+      {
+        "filter": "McapFilter",
+        "options": {
+          "min_market_cap": 2500
+        }
+      },
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "return_size": 10
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "positive_return_size": 10
+        }
+      }
+    ]
+  },
+  "financial_sector": {
+    "class": null,
+    "universe": "Financial_Sector",
+    "filters": [
+      {
+        "filter": "McapFilter",
+        "options": {
+          "min_market_cap": 2500
+        }
+      },
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "return_size": 10
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "positive_return_size": 10
+        }
+      }
+    ]
+  },
+  "agricultural_sector": {
+    "class": null,
+    "universe": "Agricultural_Sector",
+    "filters": [
+      {
+        "filter": "McapFilter",
+        "options": {
+          "min_market_cap": 2500
+        }
+      },
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "return_size": 10
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "positive_return_size": 10
+        }
+      }
+    ]
+  },
+  "healthcare_sector": {
+    "class": null,
+    "universe": "Healthcare_Sector",
+    "filters": [
+      {
+        "filter": "McapFilter",
+        "options": {
+          "min_market_cap": 2500
+        }
+      },
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "return_size": 10
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "positive_return_size": 10
+        }
+      }
+    ]
+  },
+  "b2b_sector": {
+    "class": null,
+    "universe": "B2B_Sector",
+    "filters": [
+      {
+        "filter": "McapFilter",
+        "options": {
+          "min_market_cap": 2500
+        }
+      },
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "return_size": 10
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "positive_return_size": 10
+        }
+      }
+    ]
+  },
+  "consumer_sector": {
+    "class": null,
+    "universe": "Consumer_Sector",
+    "filters": [
+      {
+        "filter": "McapFilter",
+        "options": {
+          "min_market_cap": 2500
+        }
+      },
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "return_size": 10
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "positive_return_size": 10
+        }
+      }
+    ]
+  },
+  "manufacturing_sector": {
+    "class": null,
+    "universe": "Manufacturing_Sector",
+    "filters": [
+      {
+        "filter": "McapFilter",
+        "options": {
+          "min_market_cap": 2500
+        }
+      },
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "return_size": 10
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "positive_return_size": 10
+        }
+      }
+    ]
+  },
+  "housing_sector": {
+    "class": null,
+    "universe": "Housing_Sector",
+    "filters": [
+      {
+        "filter": "McapFilter",
+        "options": {
+          "min_market_cap": 2500
+        }
+      },
+      {
+        "filter": "AbsoluteReturnFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "return_size": 10
+        }
+      },
+      {
+        "filter": "PositiveMovementFilter",
+        "options": {
+          "calendar": "Calendar",
+          "lookup_window": 20,
+          "positive_return_size": 10
+        }
+      }
+    ]
+  }
+}
