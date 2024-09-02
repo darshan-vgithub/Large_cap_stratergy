@@ -15,12 +15,12 @@ document.addEventListener("DOMContentLoaded", function () {
     .then((response) => response.json())
     .then((data) => {
       // Populate strategy select options
-      for (const [name, strategy] of Object.entries(data)) {
+      Object.keys(data).forEach((key) => {
         const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
+        option.value = key;
+        option.textContent = key;
         strategySelect.appendChild(option);
-      }
+      });
 
       // Handle strategy selection change
       strategySelect.addEventListener("change", function () {
@@ -28,10 +28,10 @@ document.addEventListener("DOMContentLoaded", function () {
         if (selectedStrategyData) {
           // Enable the universe select field
           universeSelect.disabled = false;
-
-          // Populate universe select options
           universeSelect.innerHTML =
             '<option value="" disabled selected>Select Universe</option>';
+
+          // Populate universe select options
           const universeOption = document.createElement("option");
           universeOption.value = selectedStrategyData.universe;
           universeOption.textContent = selectedStrategyData.universe;
@@ -53,10 +53,10 @@ document.addEventListener("DOMContentLoaded", function () {
         if (selectedStrategyData) {
           // Enable the class select field
           classSelect.disabled = false;
-
-          // Populate class select options
           classSelect.innerHTML =
             '<option value="" disabled selected>Select Class</option>';
+
+          // Populate class select options
           const classOption = document.createElement("option");
           classOption.value = selectedStrategyData.class || "N/A";
           classOption.textContent = selectedStrategyData.class || "N/A";
@@ -68,11 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
       classSelect.addEventListener("change", function () {
         const selectedClassValue = this.value.trim().toLowerCase();
 
-        if (
-          !selectedClassValue ||
-          selectedClassValue === "n/a" ||
-          selectedClassValue === "na"
-        ) {
+        if (!selectedClassValue || selectedClassValue === "n/a") {
           // Show filters button if class is null, "N/A", or "na"
           filtersButton.style.display = "block";
           filtersSection.style.display = "none";
@@ -97,40 +93,50 @@ document.addEventListener("DOMContentLoaded", function () {
         filtersSection.style.display = "block"; // Show the filters section
 
         // Populate filters select dropdown
-        filtersSelect.innerHTML = selectedStrategyData.filters
-          ? selectedStrategyData.filters
-              .map(
-                (filter, index) =>
-                  `<option value="${index}">${filter.filter}</option>`
-              )
-              .join("")
-          : '<option value="" disabled>No filters available</option>';
+        if (
+          selectedStrategyData.filters &&
+          Array.isArray(selectedStrategyData.filters)
+        ) {
+          filtersSelect.innerHTML = selectedStrategyData.filters
+            .map(
+              (filter, index) =>
+                `<option value="${index}">${filter.filter}</option>`
+            )
+            .join("");
+        } else {
+          filtersSelect.innerHTML =
+            '<option value="" disabled>No filters available</option>';
+        }
       });
 
       // Handle filter selection change
       filtersSelect.addEventListener("change", function () {
         const selectedFilterIndex = this.value;
-        const selectedFilter =
-          selectedStrategyData.filters[selectedFilterIndex];
+        const selectedFilter = selectedStrategyData.filters
+          ? selectedStrategyData.filters[selectedFilterIndex]
+          : null;
 
-        if (selectedFilter) {
-          // Populate filter options based on the selected filter
+        if (selectedFilter && selectedFilter.options) {
+          // Check if options is an object and convert it to an array
+          const options =
+            typeof selectedFilter.options === "object" &&
+            selectedFilter.options !== null
+              ? Object.entries(selectedFilter.options)
+              : [];
+
           filterOptionsDiv.innerHTML = `
             <label for="${selectedFilter.filter}-options">${
             selectedFilter.filter
-          } Options</label>
-            <select id="${selectedFilter.filter}-options">
+          } Options:</label>
+            <ul>
               ${
-                selectedFilter.options
-                  ? selectedFilter.options
-                      .map(
-                        (option) =>
-                          `<option value="${option}">${option}</option>`
-                      )
+                options.length > 0
+                  ? options
+                      .map(([key, value]) => `<li>${key}: ${value}</li>`)
                       .join("")
-                  : '<option value="" disabled>No options available</option>'
+                  : "<li>No options available</li>"
               }
-            </select>
+            </ul>
           `;
         } else {
           filterOptionsDiv.innerHTML =
