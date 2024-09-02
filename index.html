@@ -7,17 +7,27 @@
     <link rel="stylesheet" href="./index.css" />
   </head>
   <body>
-    <h1>Strategies</h1>
-    <form id="strategyForm">
-      <div>
-        <label for="strategy-name">Strategy Name</label>
-        <select id="strategy-name">
-        </select>
-      </div>
-      <div id="details">
-        <!-- Strategy details will be displayed here -->
-      </div>
-    </form>
+    <div class="form-container">
+      <h1>Strategies</h1>
+      <form id="strategyForm">
+        <div class="form-group">
+          <label for="strategy-name">Strategy Name</label>
+          <select id="strategy-name"></select>
+        </div>
+        <div class="form-group">
+          <label for="universe">Universe</label>
+          <select id="universe"></select>
+        </div>
+        <div class="form-group">
+          <label for="class">Class</label>
+          <select id="class"></select>
+        </div>
+        <button id="filters-button" class="submit-button" style="display:none;">Filters</button>
+        <div id="details">
+          <!-- Strategy details will be displayed here -->
+        </div>
+      </form>
+    </div>
     <script src="index.js"></script>
   </body>
 </html>

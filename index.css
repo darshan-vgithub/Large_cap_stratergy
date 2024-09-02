@@ -107,6 +107,11 @@ h1 {
   overflow-x: auto;
 }
 
+/* Additional Styles for New Elements */
+#filters-button {
+  margin-top: 20px;
+}
+
 /* Animation */
 @keyframes fadeIn {
   from {
