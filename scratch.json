@@ -1,0 +1,28 @@
+{
+  "class": null,
+  "universe": "Nifty_Healthcare",
+  "filters": [
+    {
+      "filter": "McapFilter",
+      "options": {
+        "min_market_cap": 2500
+      }
+    },
+    {
+      "filter": "AbsoluteReturnFilter",
+      "options": {
+        "calendar": "Calendar",
+        "lookup_window": 252,
+        "return_size": 50
+      }
+    },
+    {
+      "filter": "PositiveMovementFilter",
+      "options": {
+        "calendar": "Calendar",
+        "lookup_window": 252,
+        "positive_return_size": 10
+      }
+    }
+  ]
+}
