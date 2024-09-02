@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
             '<option value="" disabled selected>Select Class</option>';
           filtersButton.style.display = "none";
           filtersSection.style.display = "none";
+          filterOptionsDiv.innerHTML = ""; // Clear filter options
           detailsDiv.innerHTML = ""; // Clear details
         }
       });
@@ -112,19 +113,29 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedFilter =
           selectedStrategyData.filters[selectedFilterIndex];
 
-        // Populate filter options based on the selected filter
-        filterOptionsDiv.innerHTML = selectedFilter.options
-          ? `<label for="${selectedFilter.filter}-options">${
-              selectedFilter.filter
-            } Options</label>
-             <select id="${selectedFilter.filter}-options">
-               ${selectedFilter.options
-                 .map(
-                   (option) => `<option value="${option}">${option}</option>`
-                 )
-                 .join("")}
-             </select>`
-          : "<p>No options available for this filter.</p>";
+        if (selectedFilter) {
+          // Populate filter options based on the selected filter
+          filterOptionsDiv.innerHTML = `
+            <label for="${selectedFilter.filter}-options">${
+            selectedFilter.filter
+          } Options</label>
+            <select id="${selectedFilter.filter}-options">
+              ${
+                selectedFilter.options
+                  ? selectedFilter.options
+                      .map(
+                        (option) =>
+                          `<option value="${option}">${option}</option>`
+                      )
+                      .join("")
+                  : '<option value="" disabled>No options available</option>'
+              }
+            </select>
+          `;
+        } else {
+          filterOptionsDiv.innerHTML =
+            "<p>No filter selected or options unavailable.</p>";
+        }
       });
     })
     .catch((error) => console.error("Error fetching the JSON file:", error));
