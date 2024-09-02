@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
           classSelect.innerHTML =
             '<option value="" disabled selected>Select Class</option>';
           const classOption = document.createElement("option");
-          classOption.value = selectedStrategyData.class;
+          classOption.value = selectedStrategyData.class || "N/A";
           classOption.textContent = selectedStrategyData.class || "N/A";
           classSelect.appendChild(classOption);
         }
@@ -63,13 +63,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Handle class selection change
       classSelect.addEventListener("change", function () {
-        if (this.value === "N/A") {
-          // Show filters button and reset filters section
+        // Get the selected class value, converting to lowercase and trimming whitespace for consistency
+        const selectedClassValue = this.value.trim().toLowerCase();
+
+        // Check if the class is "n/a", "na", or empty (null)
+        if (
+          !selectedClassValue ||
+          selectedClassValue === "n/a" ||
+          selectedClassValue === "na"
+        ) {
+          // Show the filters button if the class is null, "N/A", or "na"
           filtersButton.style.display = "block";
-          filtersDiv.style.display = "none";
-          filtersDiv.innerHTML = "";
+          filtersDiv.style.display = "none"; // Hide filters initially
+          detailsDiv.innerHTML = ""; // Clear details
         } else {
-          // Hide filters button if class is selected
+          // Hide the filters button and show strategy details if a valid class is selected
           filtersButton.style.display = "none";
           filtersDiv.style.display = "none";
           filtersDiv.innerHTML = "";
@@ -88,9 +96,9 @@ document.addEventListener("DOMContentLoaded", function () {
       // Handle filters button click
       filtersButton.addEventListener("click", function (e) {
         e.preventDefault();
-        filtersDiv.style.display = "block";
+        filtersDiv.style.display = "block"; // Show the filters section
 
-        // Populate filters section
+        // Populate the filters section with options from the JSON data
         filtersDiv.innerHTML = selectedStrategyData.filters
           ? selectedStrategyData.filters
               .map(
