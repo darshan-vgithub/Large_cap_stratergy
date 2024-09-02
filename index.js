@@ -101,21 +101,34 @@ document.addEventListener("DOMContentLoaded", function () {
         // Populate the filters section with options from the JSON data
         filtersDiv.innerHTML = selectedStrategyData.filters
           ? selectedStrategyData.filters
-              .map(
-                (filter) => `
-                <div class="form-group">
-                  <label for="${filter.filter}">${filter.filter}</label>
-                  <select id="${filter.filter}">
-                    ${filter.options
-                      .map(
-                        (option) =>
-                          `<option value="${option}">${option}</option>`
-                      )
-                      .join("")}
-                  </select>
-                </div>
-              `
-              )
+              .map((filter) => {
+                // Ensure that filter.options is an array
+                if (Array.isArray(filter.options)) {
+                  return `
+                      <div class="form-group">
+                        <label for="${filter.filter}">${filter.filter}</label>
+                        <select id="${filter.filter}">
+                          ${filter.options
+                            .map(
+                              (option) =>
+                                `<option value="${option}">${option}</option>`
+                            )
+                            .join("")}
+                        </select>
+                      </div>
+                    `;
+                } else {
+                  // If options is not an array, display an error or default option
+                  return `
+                      <div class="form-group">
+                        <label for="${filter.filter}">${filter.filter}</label>
+                        <select id="${filter.filter}">
+                          <option value="" disabled>No options available</option>
+                        </select>
+                      </div>
+                    `;
+                }
+              })
               .join("")
           : "<p>No filters available for this strategy.</p>";
       });
