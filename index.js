@@ -172,7 +172,6 @@ document.addEventListener("DOMContentLoaded", function () {
     el.appendChild(deleteButton);
     filterDefaultDiv.parentNode.prepend(el);
   };
-
   addCustomFilterButton.onclick = () => {
     const customFilterDiv = document.createElement("div");
     customFilterDiv.style.margin = "10px 0";
@@ -181,15 +180,15 @@ document.addEventListener("DOMContentLoaded", function () {
     <input type="text" class="custom-filter-name" placeholder="Filter Name" />
     <label>Filter Type:</label>
     <select class="custom-filter-type">
+      <option value="select">Select</option>
       <option value="calendar">Calendar</option>
-      <option value="number">Number</option>
     </select>
     <div class="custom-filter-options-container"></div>
     <button type="button" class="save-custom-filter">Save</button>
     <button type="button" class="delete-custom-filter">Delete</button>
   `;
 
-    // Add options based on the filter type
+    // Add options for selected filter type
     const filterTypeSelect = customFilterDiv.querySelector(
       ".custom-filter-type"
     );
@@ -200,46 +199,42 @@ document.addEventListener("DOMContentLoaded", function () {
       optionsContainer.innerHTML = ""; // Clear existing options
 
       if (this.value === "calendar") {
-        settings.calendars.forEach((calendar) => {
-          const optionInput = document.createElement("input");
-          optionInput.type = "radio";
-          optionInput.name = "calendar-option";
-          optionInput.value = calendar;
-          optionInput.id = `calendar-${calendar}`;
-          const optionLabel = document.createElement("label");
-          optionLabel.innerText = calendar;
-          optionLabel.setAttribute("for", optionInput.id);
+        const selectEl = document.createElement("select");
+        selectEl.name = "calendar";
 
-          optionsContainer.appendChild(optionInput);
-          optionsContainer.appendChild(optionLabel);
-          optionsContainer.appendChild(document.createElement("br"));
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.innerText = "Select Calendar";
+        selectEl.appendChild(defaultOption);
+
+        settings.calendars.forEach((calendar) => {
+          const optionEl = document.createElement("option");
+          optionEl.value = calendar;
+          optionEl.innerText = calendar;
+          selectEl.appendChild(optionEl);
         });
 
-        // Add two number inputs for Look up window and Return size
-        const lookUpWindowInput = document.createElement("input");
-        lookUpWindowInput.type = "number";
-        lookUpWindowInput.placeholder = "Look up window";
-        const lookUpWindowLabel = document.createElement("label");
-        lookUpWindowLabel.innerText = "Look up window";
-        lookUpWindowLabel.setAttribute("for", "look-up-window");
+        const label = document.createElement("label");
+        label.innerText = "Select Calendar";
+        const divEl = document.createElement("div");
+        divEl.style.display = "flex";
+        divEl.style.flexDirection = "column";
+        divEl.appendChild(label);
+        divEl.appendChild(selectEl);
 
-        const returnSizeInput = document.createElement("input");
-        returnSizeInput.type = "number";
-        returnSizeInput.placeholder = "Return size";
-        const returnSizeLabel = document.createElement("label");
-        returnSizeLabel.innerText = "Return size";
-        returnSizeLabel.setAttribute("for", "return-size");
+        optionsContainer.appendChild(divEl);
 
-        optionsContainer.appendChild(lookUpWindowLabel);
-        optionsContainer.appendChild(lookUpWindowInput);
-        optionsContainer.appendChild(document.createElement("br"));
-        optionsContainer.appendChild(returnSizeLabel);
-        optionsContainer.appendChild(returnSizeInput);
-      } else {
-        const input = document.createElement("input");
-        input.type = "text";
-        input.className = "custom-filter-options";
-        optionsContainer.appendChild(input);
+        // Add number inputs for Look up window and Return size
+        createNumberInput(optionsContainer, {
+          label: "Look up window",
+          property: "look_up_window",
+          type: "number",
+        });
+        createNumberInput(optionsContainer, {
+          label: "Return size",
+          property: "return_size",
+          type: "number",
+        });
       }
     });
 
@@ -265,13 +260,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (filterType === "calendar") {
           const selectedCalendar = optionsContainer.querySelector(
-            "input[type=radio]:checked"
-          );
+            "select[name='calendar']"
+          ).value;
           if (selectedCalendar) {
             customFilter.options.push({
-              label: selectedCalendar.nextSibling.textContent,
-              property: selectedCalendar.id,
+              label: "Calendar",
+              property: "calendar",
               type: "calendar",
+              value: selectedCalendar,
             });
           }
 
@@ -299,28 +295,17 @@ document.addEventListener("DOMContentLoaded", function () {
               value: returnSize,
             });
           }
-        } else {
-          customFilter.options.push({
-            label: "Custom Option",
-            property: "custom_option",
-            type: "number",
-          });
         }
 
         settings.filters.push(customFilter);
-        const optionEl = document.createElement("option");
-        optionEl.value = filterName;
-        optionEl.innerHTML = filterName;
-        filtersSelect.appendChild(optionEl);
-
-        customFiltersContainer.removeChild(customFilterDiv);
+        updateFiltersSelect();
       });
 
     // Delete custom filter
     customFilterDiv
       .querySelector(".delete-custom-filter")
       .addEventListener("click", () => {
-        customFiltersContainer.removeChild(customFilterDiv);
+        customFilterDiv.remove();
       });
 
     customFiltersContainer.appendChild(customFilterDiv);
