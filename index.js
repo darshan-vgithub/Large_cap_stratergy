@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <button type="button" class="delete-custom-filter">Delete</button>
     `;
 
-    // Add calendar options if the filter type is calendar
+    // Add calendar options dynamically
     const filterTypeSelect = customFilterDiv.querySelector(
       ".custom-filter-type"
     );
