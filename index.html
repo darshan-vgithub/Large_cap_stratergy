@@ -1,68 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Strategy Selector</title>
     <link rel="stylesheet" href="./index.css" />
-    <link
-      rel="shortcut icon"
-      href="./assets/logo-favicon.ico"
-      type="image/x-icon"
-    />
-  </head>
-  <body>
+    <link rel="shortcut icon" href="./assets/logo-favicon.ico" type="image/x-icon" />
+</head>
+<body>
     <div class="form-container">
-      <h1>Strategies</h1>
-      <form id="strategyForm">
-        <div class="form-group">
-          <label for="strategy-name">Strategy Name</label>
-          <input type="text" id="strategy-name" />
-        </div>
-        <div class="form-group">
-          <label for="universe">Universe</label>
-          <select id="universe">
-            <option value="" selected>Select Universe</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="class">Class</label>
-          <select id="class">
-            <option value="" selected>Select Class</option>
-          </select>
-        </div>
-        <div id="filters-section">
-          <label for="filters-select">Filters</label>
-          <div class="form-group">
-            <div
-              id="filter-default"
-              style="
-                display: none;
-                margin: 5px;
-                padding: 5px;
-                border: solid #eee 1px;
-              "
-            >
-              <select id="filters-select">
-                <option value="" disabled selected>Select Filter</option>
-              </select>
-              <div class="filter-options"></div>
+        <h1>Strategies</h1>
+        <form id="strategyForm">
+            <div class="form-group">
+                <label for="strategy-name">Strategy Name</label>
+                <input type="text" id="strategy-name" />
             </div>
-            <div>
-              <br />
-              <button id="addFilter" type="button">Add Filter</button>
+            <div class="form-group">
+                <label for="universe">Universe</label>
+                <select id="universe">
+                    <option value="" selected>Select Universe</option>
+                </select>
             </div>
-          </div>
-          <div id="custom-filters-section">
-            <button id="addCustomFilter" type="button">+ Add Custom Filter</button>
-            <div id="custom-filters-container"></div>
-          </div>
-        </div>
-        <div id="details">
-          <!-- Strategy details will be displayed here -->
-        </div>
-      </form>
+            <div class="form-group">
+                <label for="class">Class</label>
+                <select id="class">
+                    <option value="" selected>Select Class</option>
+                </select>
+            </div>
+            <div id="filters-section">
+                <label for="filters-select">Filters</label>
+                <div class="form-group">
+                    <div id="filter-default" style="display: none; margin: 5px; padding: 5px; border: solid #eee 1px;">
+                        <select id="filters-select">
+                            <option value="" disabled selected>Select Filter</option>
+                        </select>
+                        <div class="filter-options"></div>
+                    </div>
+                    <div>
+                        <br />
+                        <button id="addFilter" type="button">Add Filter</button>
+                    </div>
+                </div>
+                <div id="custom-filters-section">
+                    <button id="addCustomFilter" type="button">+ Add Custom Filter</button>
+                    <div id="custom-filters-container"></div>
+                </div>
+            </div>
+            <div id="details">
+                <!-- Strategy details will be displayed here -->
+            </div>
+        </form>
     </div>
     <script src="index.js"></script>
-  </body>
+</body>
 </html>
