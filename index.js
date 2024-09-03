@@ -94,19 +94,29 @@ function createCalenderInput(el, options) {
 }
 
 function filterTypeSelected(ev) {
+  const filterContainer = ev.target.closest(".form-group");
+
+  // Remove any previously appended filter options
+  const existingOptions = filterContainer.querySelectorAll(
+    'div[style*="display: flex"]'
+  );
+  existingOptions.forEach((option) => option.remove());
+
   const filterTypeVal = ev.target.value;
-  const f = settings.filters.filter((o) => o["label"] === filterTypeVal)[0];
+  const f = settings.filters.find((o) => o.label === filterTypeVal);
+
   f.options.forEach((o) => {
-    switch (o["type"]) {
+    switch (o.type) {
       case "number":
         createNumberInput(ev.target, o);
         break;
-
       case "calendar":
         createCalenderInput(ev.target, o);
+        break;
     }
   });
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
   const strategySelect = document.getElementById("strategy-name");
