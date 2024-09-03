@@ -1,3 +1,8 @@
+const settings = {
+  classes: ["CruiseMomentum", "None"]
+}
+
+
 {
   "class": null,
   "universe": "Nifty_Healthcare",

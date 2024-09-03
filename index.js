@@ -1,3 +1,113 @@
+const settings = {
+  classes: ["CruiseMomentum", "None"],
+  universes: ["Mcap_100", "Nifty_50", "Nifty_IT"],
+  calendars: ["XNSE", "BCME"],
+  filters: [
+    {
+      label: "Market Cap Filter",
+      class: "McapFilter",
+      options: [
+        {
+          label: "Minimum Cap",
+          property: "min_market_cap",
+          type: "number",
+        },
+      ],
+    },
+    {
+      label: "Generic Momentum Filter",
+      class: "AbsoluteReturnFilter",
+      options: [
+        {
+          label: "Calendar",
+          property: "calendar_name",
+          type: "calendar",
+        },
+        {
+          label: "look up window",
+          property: "lookup_window",
+          type: "number",
+        },
+        {
+          label: "return size",
+          property: "return_size",
+          type: "number",
+        },
+      ],
+    },
+    {
+      label: "PositiveMovementFilter",
+      class: "PositiveMovementFilter",
+      options: [
+        {
+          label: "Calendar",
+          property: "calendar",
+          type: "calendar",
+        },
+        {
+          label: "look up window",
+          property: "lookup_window",
+          type: "number",
+        },
+        {
+          label: "Positive return size",
+          property: "positive_return_size",
+          type: "number",
+        },
+      ],
+    },
+  ],
+};
+
+function createNumberInput(el, options) {
+  const inputEl = document.createElement("input");
+  inputEl.type = "number";
+  inputEl.name = options["property"];
+  const label = document.createElement("label");
+  label.innerText = options["label"];
+  const divEl = document.createElement("div");
+  divEl.style.display = "flex";
+  divEl.appendChild(label);
+  divEl.appendChild(inputEl);
+  el.parentNode.appendChild(divEl);
+}
+
+function createCalenderInput(el, options) {
+  const selectEl = document.createElement("select");
+  selectEl.name = options["property"];
+
+  settings.calendars.forEach((o) => {
+    const optionEl = document.createElement("option");
+    optionEl.value = o;
+    optionEl.innerText = o;
+    selectEl.appendChild(optionEl);
+  });
+
+  const label = document.createElement("label");
+  label.innerText = options["label"];
+  const divEl = document.createElement("div");
+  divEl.style.display = "flex";
+  divEl.appendChild(label);
+  divEl.appendChild(selectEl);
+
+  el.parentNode.appendChild(divEl);
+}
+
+function filterTypeSelected(ev) {
+  const filterTypeVal = ev.target.value;
+  const f = settings.filters.filter((o) => o["label"] === filterTypeVal)[0];
+  f.options.forEach((o) => {
+    switch (o["type"]) {
+      case "number":
+        createNumberInput(ev.target, o);
+        break;
+
+      case "calendar":
+        createCalenderInput(ev.target, o);
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const strategySelect = document.getElementById("strategy-name");
   const universeSelect = document.getElementById("universe");
@@ -5,8 +115,39 @@ document.addEventListener("DOMContentLoaded", function () {
   const filtersButton = document.getElementById("filters-button");
   const filtersSection = document.getElementById("filters-section");
   const filtersSelect = document.getElementById("filters-select");
+  const filterDefaultDiv = document.getElementById("filter-default");
   const filterOptionsDiv = document.getElementById("filter-options");
+  const addFilter = document.getElementById("addFilter");
   const detailsDiv = document.getElementById("details");
+
+  settings.universes.forEach((o) => {
+    const el = document.createElement("option");
+    el.value = o;
+    el.innerHTML = o;
+    universeSelect.appendChild(el);
+  });
+
+  settings.classes.forEach((o) => {
+    const el = document.createElement("option");
+    el.value = o;
+    el.innerHTML = o;
+    classSelect.appendChild(el);
+  });
+
+  settings.filters.forEach((o) => {
+    const el = document.createElement("option");
+    el.value = o["label"];
+    el.innerHTML = o["label"];
+    filtersSelect.appendChild(el);
+  });
+
+  addFilter.onclick = (ev) => {
+    const el = filterDefaultDiv.cloneNode(true);
+    el.id = "filter-" + new Date().getTime();
+    el.style.display = "block";
+    el.addEventListener("change", filterTypeSelected);
+    filterDefaultDiv.parentNode.prepend(el);
+  };
 
   let selectedStrategyData = null;
 
