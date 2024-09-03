@@ -134,6 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
     "custom-filters-container"
   );
 
+  // Populate the universe and class selects
   settings.universes.forEach((o) => {
     const el = document.createElement("option");
     el.value = o;
@@ -154,6 +155,25 @@ document.addEventListener("DOMContentLoaded", function () {
     el.innerHTML = o["label"];
     filtersSelect.appendChild(el);
   });
+
+  // Handle class selection change
+  classSelect.addEventListener("change", function () {
+    const selectedClass = classSelect.value;
+
+    // Show or hide filters and custom filter options based on selected class
+    if (selectedClass === "None") {
+      filtersSection.style.display = "block";
+      addFilter.style.display = "block";
+      addCustomFilterButton.style.display = "block";
+    } else {
+      filtersSection.style.display = "none";
+      addFilter.style.display = "none";
+      addCustomFilterButton.style.display = "none";
+    }
+  });
+
+  // Trigger the change event on page load to set the initial state
+  classSelect.dispatchEvent(new Event("change"));
 
   addFilter.onclick = (ev) => {
     // Clone the filterDefaultDiv without its children
