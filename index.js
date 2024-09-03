@@ -175,19 +175,24 @@ document.addEventListener("DOMContentLoaded", function () {
   addCustomFilterButton.onclick = () => {
     const customFilterDiv = document.createElement("div");
     customFilterDiv.style.margin = "10px 0";
+    customFilterDiv.style.padding = "10px";
+    customFilterDiv.style.border = "1px solid #ccc";
+    customFilterDiv.style.borderRadius = "5px";
+    customFilterDiv.style.backgroundColor = "#f9f9f9";
+
     customFilterDiv.innerHTML = `
-    <label>Custom Filter Name:</label>
-    <input type="text" class="custom-filter-name" placeholder="Filter Name" />
-    <label>Calendar:</label>
-    <select class="custom-calendar-select">
+    <label style="display: block; margin-bottom: 5px;">Custom Filter Name:</label>
+    <input type="text" class="custom-filter-name" placeholder="Filter Name" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+    <label style="display: block; margin: 10px 0 5px;">Calendar:</label>
+    <select class="custom-calendar-select" style="width: 100%; padding: 8px; box-sizing: border-box;">
       <option value="">Select Calendar</option>
     </select>
-    <label>Look up window:</label>
-    <input type="number" class="custom-look-up-window" placeholder="Look up window" />
-    <label>Return size:</label>
-    <input type="number" class="custom-return-size" placeholder="Return size" />
-    <button type="button" class="save-custom-filter">Save</button>
-    <button type="button" class="delete-custom-filter">Delete</button>
+    <label style="display: block; margin: 10px 0 5px;">Look up window:</label>
+    <input type="number" class="custom-look-up-window" placeholder="Look up window" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+    <label style="display: block; margin: 10px 0 5px;">Return size:</label>
+    <input type="number" class="custom-return-size" placeholder="Return size" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+    <button type="button" class="save-custom-filter" style="margin-top: 10px; padding: 10px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Save</button>
+    <button type="button" class="delete-custom-filter" style="margin-top: 10px; padding: 10px 15px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;">Delete</button>
   `;
 
     // Populate the calendar select field
