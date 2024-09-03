@@ -156,11 +156,34 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   addFilter.onclick = (ev) => {
-    const el = filterDefaultDiv.cloneNode(true);
+    // Clone the filterDefaultDiv without its children
+    const el = filterDefaultDiv.cloneNode(false);
     el.id = "filter-" + new Date().getTime();
     el.style.display = "block";
-    el.addEventListener("change", filterTypeSelected);
 
+    // Create a select element to hold the filter options
+    const selectEl = document.createElement("select");
+    selectEl.addEventListener("change", filterTypeSelected);
+
+    // Add a default "Select Filter" option
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.innerHTML = "Select Filter";
+    defaultOption.disabled = true;
+    defaultOption.selected = true; // Set as selected by default
+    selectEl.appendChild(defaultOption);
+
+    // Populate the select element with filter options
+    settings.filters.forEach((o) => {
+      const option = document.createElement("option");
+      option.value = o.label;
+      option.innerHTML = o.label;
+      selectEl.appendChild(option);
+    });
+
+    el.appendChild(selectEl);
+
+    // Create and append the delete button
     const deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
     deleteButton.style.marginLeft = "10px";
@@ -168,10 +191,12 @@ document.addEventListener("DOMContentLoaded", function () {
     deleteButton.onclick = () => {
       el.remove();
     };
-
     el.appendChild(deleteButton);
+
+    // Prepend the newly created filter section to the container
     filterDefaultDiv.parentNode.prepend(el);
   };
+
   addCustomFilterButton.onclick = () => {
     const customFilterDiv = document.createElement("div");
     customFilterDiv.style.margin = "10px 0";
