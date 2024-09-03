@@ -117,7 +117,6 @@ function filterTypeSelected(ev) {
   });
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
   const strategySelect = document.getElementById("strategy-name");
   const universeSelect = document.getElementById("universe");
@@ -156,6 +155,17 @@ document.addEventListener("DOMContentLoaded", function () {
     el.id = "filter-" + new Date().getTime();
     el.style.display = "block";
     el.addEventListener("change", filterTypeSelected);
+
+    // Add a delete button for each filter
+    const deleteButton = document.createElement("button");
+    deleteButton.innerText = "Delete";
+    deleteButton.style.marginLeft = "10px";
+    deleteButton.type = "button";
+    deleteButton.onclick = () => {
+      el.remove();
+    };
+
+    el.appendChild(deleteButton);
     filterDefaultDiv.parentNode.prepend(el);
   };
 
@@ -282,21 +292,20 @@ document.addEventListener("DOMContentLoaded", function () {
             <label for="${selectedFilter.filter}-options">${
             selectedFilter.filter
           } Options:</label>
-            <ul>
-              ${
-                options.length > 0
-                  ? options
-                      .map(([key, value]) => `<li>${key}: ${value}</li>`)
-                      .join("")
-                  : "<li>No options available</li>"
-              }
-            </ul>
+            ${options
+              .map(
+                ([key, value]) =>
+                  `<input type="text" id="${selectedFilter.filter}-${key}" name="${key}" value="${value}">`
+              )
+              .join("<br>")}
           `;
         } else {
           filterOptionsDiv.innerHTML =
-            "<p>No filter selected or options unavailable.</p>";
+            "<p>No options available for this filter.</p>";
         }
       });
     })
-    .catch((error) => console.error("Error fetching the JSON file:", error));
+    .catch((error) => {
+      console.error("Error fetching strategy data:", error);
+    });
 });
