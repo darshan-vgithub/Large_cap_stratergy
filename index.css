@@ -60,7 +60,6 @@ h1 {
   outline: none;
 }
 
-/* Button */
 .submit-button {
   padding: 10px 15px;
   border: none;
@@ -78,6 +77,34 @@ h1 {
 
 .submit-button:hover {
   background-color: #0056b3;
+}
+
+/* Additional Button Styles */
+button[type="button"] {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+button[type="button"]:hover {
+  background-color: #ff1a1a;
+}
+
+#addFilter {
+  background-color: #28a745; /* Green background */
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#addFilter:hover {
+  background-color: #218838; /* Darker green on hover */
 }
 
 /* Details Section */
