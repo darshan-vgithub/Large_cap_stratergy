@@ -178,64 +178,27 @@ document.addEventListener("DOMContentLoaded", function () {
     customFilterDiv.innerHTML = `
     <label>Custom Filter Name:</label>
     <input type="text" class="custom-filter-name" placeholder="Filter Name" />
-    <label>Filter Type:</label>
-    <select class="custom-filter-type">
-      <option value="select">Select</option>
-      <option value="calendar">Calendar</option>
+    <label>Calendar:</label>
+    <select class="custom-calendar-select">
+      <option value="">Select Calendar</option>
     </select>
-    <div class="custom-filter-options-container"></div>
+    <label>Look up window:</label>
+    <input type="number" class="custom-look-up-window" placeholder="Look up window" />
+    <label>Return size:</label>
+    <input type="number" class="custom-return-size" placeholder="Return size" />
     <button type="button" class="save-custom-filter">Save</button>
     <button type="button" class="delete-custom-filter">Delete</button>
   `;
 
-    // Add options for selected filter type
-    const filterTypeSelect = customFilterDiv.querySelector(
-      ".custom-filter-type"
+    // Populate the calendar select field
+    const calendarSelect = customFilterDiv.querySelector(
+      ".custom-calendar-select"
     );
-    filterTypeSelect.addEventListener("change", function () {
-      const optionsContainer = customFilterDiv.querySelector(
-        ".custom-filter-options-container"
-      );
-      optionsContainer.innerHTML = ""; // Clear existing options
-
-      if (this.value === "calendar") {
-        const selectEl = document.createElement("select");
-        selectEl.name = "calendar";
-
-        const defaultOption = document.createElement("option");
-        defaultOption.value = "";
-        defaultOption.innerText = "Select Calendar";
-        selectEl.appendChild(defaultOption);
-
-        settings.calendars.forEach((calendar) => {
-          const optionEl = document.createElement("option");
-          optionEl.value = calendar;
-          optionEl.innerText = calendar;
-          selectEl.appendChild(optionEl);
-        });
-
-        const label = document.createElement("label");
-        label.innerText = "Select Calendar";
-        const divEl = document.createElement("div");
-        divEl.style.display = "flex";
-        divEl.style.flexDirection = "column";
-        divEl.appendChild(label);
-        divEl.appendChild(selectEl);
-
-        optionsContainer.appendChild(divEl);
-
-        // Add number inputs for Look up window and Return size
-        createNumberInput(optionsContainer, {
-          label: "Look up window",
-          property: "look_up_window",
-          type: "number",
-        });
-        createNumberInput(optionsContainer, {
-          label: "Return size",
-          property: "return_size",
-          type: "number",
-        });
-      }
+    settings.calendars.forEach((calendar) => {
+      const optionEl = document.createElement("option");
+      optionEl.value = calendar;
+      optionEl.innerText = calendar;
+      calendarSelect.appendChild(optionEl);
     });
 
     // Save custom filter
@@ -245,12 +208,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const filterName = customFilterDiv.querySelector(
           ".custom-filter-name"
         ).value;
-        const filterType = customFilterDiv.querySelector(
-          ".custom-filter-type"
+        const selectedCalendar = customFilterDiv.querySelector(
+          ".custom-calendar-select"
         ).value;
-        const optionsContainer = customFilterDiv.querySelector(
-          ".custom-filter-options-container"
-        );
+        const lookUpWindow = customFilterDiv.querySelector(
+          ".custom-look-up-window"
+        ).value;
+        const returnSize = customFilterDiv.querySelector(
+          ".custom-return-size"
+        ).value;
 
         const customFilter = {
           label: filterName,
@@ -258,47 +224,43 @@ document.addEventListener("DOMContentLoaded", function () {
           options: [],
         };
 
-        if (filterType === "calendar") {
-          const selectedCalendar = optionsContainer.querySelector(
-            "select[name='calendar']"
-          ).value;
-          if (selectedCalendar) {
-            customFilter.options.push({
-              label: "Calendar",
-              property: "calendar",
-              type: "calendar",
-              value: selectedCalendar,
-            });
-          }
+        if (selectedCalendar) {
+          customFilter.options.push({
+            label: "Calendar",
+            property: "calendar",
+            type: "calendar",
+            value: selectedCalendar,
+          });
+        }
 
-          const lookUpWindow = optionsContainer.querySelector(
-            'input[placeholder="Look up window"]'
-          ).value;
-          const returnSize = optionsContainer.querySelector(
-            'input[placeholder="Return size"]'
-          ).value;
+        if (lookUpWindow) {
+          customFilter.options.push({
+            label: "Look up window",
+            property: "look_up_window",
+            type: "number",
+            value: lookUpWindow,
+          });
+        }
 
-          if (lookUpWindow) {
-            customFilter.options.push({
-              label: "Look up window",
-              property: "look_up_window",
-              type: "number",
-              value: lookUpWindow,
-            });
-          }
-
-          if (returnSize) {
-            customFilter.options.push({
-              label: "Return size",
-              property: "return_size",
-              type: "number",
-              value: returnSize,
-            });
-          }
+        if (returnSize) {
+          customFilter.options.push({
+            label: "Return size",
+            property: "return_size",
+            type: "number",
+            value: returnSize,
+          });
         }
 
         settings.filters.push(customFilter);
-        updateFiltersSelect();
+
+        // Update the filters dropdown in the form
+        const filtersSelect = document.getElementById("filters-select");
+        const optionEl = document.createElement("option");
+        optionEl.value = filterName;
+        optionEl.innerHTML = filterName;
+        filtersSelect.appendChild(optionEl);
+
+        customFiltersContainer.removeChild(customFilterDiv);
       });
 
     // Delete custom filter
