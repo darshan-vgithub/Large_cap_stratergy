@@ -177,20 +177,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const customFilterDiv = document.createElement("div");
     customFilterDiv.style.margin = "10px 0";
     customFilterDiv.innerHTML = `
-      <label>Custom Filter Name:</label>
-      <input type="text" class="custom-filter-name" placeholder="Filter Name" />
-      <label>Filter Type:</label>
-      <select class="custom-filter-type">
-        <option value="calendar">Calendar</option>
-        <option value="number">Number</option>
-      </select>
-      <label>Custom Filter Options:</label>
-      <div class="custom-filter-options-container"></div>
-      <button type="button" class="save-custom-filter">Save</button>
-      <button type="button" class="delete-custom-filter">Delete</button>
-    `;
+    <label>Custom Filter Name:</label>
+    <input type="text" class="custom-filter-name" placeholder="Filter Name" />
+    <label>Filter Type:</label>
+    <select class="custom-filter-type">
+      <option value="calendar">Calendar</option>
+      <option value="number">Number</option>
+    </select>
+    <div class="custom-filter-options-container"></div>
+    <button type="button" class="save-custom-filter">Save</button>
+    <button type="button" class="delete-custom-filter">Delete</button>
+  `;
 
-    // Add calendar options dynamically
+    // Add options based on the filter type
     const filterTypeSelect = customFilterDiv.querySelector(
       ".custom-filter-type"
     );
@@ -203,7 +202,8 @@ document.addEventListener("DOMContentLoaded", function () {
       if (this.value === "calendar") {
         settings.calendars.forEach((calendar) => {
           const optionInput = document.createElement("input");
-          optionInput.type = "checkbox";
+          optionInput.type = "radio";
+          optionInput.name = "calendar-option";
           optionInput.value = calendar;
           optionInput.id = `calendar-${calendar}`;
           const optionLabel = document.createElement("label");
@@ -214,6 +214,27 @@ document.addEventListener("DOMContentLoaded", function () {
           optionsContainer.appendChild(optionLabel);
           optionsContainer.appendChild(document.createElement("br"));
         });
+
+        // Add two number inputs for Look up window and Return size
+        const lookUpWindowInput = document.createElement("input");
+        lookUpWindowInput.type = "number";
+        lookUpWindowInput.placeholder = "Look up window";
+        const lookUpWindowLabel = document.createElement("label");
+        lookUpWindowLabel.innerText = "Look up window";
+        lookUpWindowLabel.setAttribute("for", "look-up-window");
+
+        const returnSizeInput = document.createElement("input");
+        returnSizeInput.type = "number";
+        returnSizeInput.placeholder = "Return size";
+        const returnSizeLabel = document.createElement("label");
+        returnSizeLabel.innerText = "Return size";
+        returnSizeLabel.setAttribute("for", "return-size");
+
+        optionsContainer.appendChild(lookUpWindowLabel);
+        optionsContainer.appendChild(lookUpWindowInput);
+        optionsContainer.appendChild(document.createElement("br"));
+        optionsContainer.appendChild(returnSizeLabel);
+        optionsContainer.appendChild(returnSizeInput);
       } else {
         const input = document.createElement("input");
         input.type = "text";
@@ -243,15 +264,41 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         if (filterType === "calendar") {
-          optionsContainer
-            .querySelectorAll("input[type=checkbox]:checked")
-            .forEach((checkbox) => {
-              customFilter.options.push({
-                label: checkbox.nextSibling.textContent,
-                property: checkbox.id,
-                type: "calendar",
-              });
+          const selectedCalendar = optionsContainer.querySelector(
+            "input[type=radio]:checked"
+          );
+          if (selectedCalendar) {
+            customFilter.options.push({
+              label: selectedCalendar.nextSibling.textContent,
+              property: selectedCalendar.id,
+              type: "calendar",
             });
+          }
+
+          const lookUpWindow = optionsContainer.querySelector(
+            'input[placeholder="Look up window"]'
+          ).value;
+          const returnSize = optionsContainer.querySelector(
+            'input[placeholder="Return size"]'
+          ).value;
+
+          if (lookUpWindow) {
+            customFilter.options.push({
+              label: "Look up window",
+              property: "look_up_window",
+              type: "number",
+              value: lookUpWindow,
+            });
+          }
+
+          if (returnSize) {
+            customFilter.options.push({
+              label: "Return size",
+              property: "return_size",
+              type: "number",
+              value: returnSize,
+            });
+          }
         } else {
           customFilter.options.push({
             label: "Custom Option",
