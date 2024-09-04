@@ -72,3 +72,48 @@ button:hover {
 .delete-custom-filter {
   margin: 5px 5px 0 0;
 }
+
+/* Responsive Styles for screens with max-width 1024px */
+@media only screen and (max-width: 1024px) {
+  .form-container {
+    padding: 15px;
+    margin: 15px auto;
+  }
+
+  h1 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 6px;
+  }
+
+  button {
+    padding: 8px 12px;
+  }
+
+  #filters-section {
+    margin-top: 15px;
+  }
+
+  #filter-default {
+    margin-bottom: 8px;
+  }
+
+  .custom-filter-name,
+  .custom-filter-options {
+    padding: 6px;
+  }
+
+  .save-custom-filter,
+  .delete-custom-filter {
+    margin: 3px 3px 0 0;
+    padding: 8px 12px;
+  }
+}
