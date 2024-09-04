@@ -236,7 +236,6 @@ document.addEventListener("DOMContentLoaded", function () {
     <input type="number" class="custom-look-up-window" placeholder="Look up window" style="width: 100%; padding: 8px; box-sizing: border-box;" />
     <label style="display: block; margin: 10px 0 5px;">Return size:</label>
     <input type="number" class="custom-return-size" placeholder="Return size" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-    <button type="button" class="save-custom-filter" style="margin-top: 10px; padding: 10px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Save</button>
     <button type="button" class="delete-custom-filter" style="margin-top: 10px; padding: 10px 15px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;">Delete</button>
   `;
 
@@ -251,68 +250,6 @@ document.addEventListener("DOMContentLoaded", function () {
       calendarSelect.appendChild(optionEl);
     });
 
-    // Save custom filter
-    customFilterDiv
-      .querySelector(".save-custom-filter")
-      .addEventListener("click", () => {
-        const filterName = customFilterDiv.querySelector(
-          ".custom-filter-name"
-        ).value;
-        const selectedCalendar = customFilterDiv.querySelector(
-          ".custom-calendar-select"
-        ).value;
-        const lookUpWindow = customFilterDiv.querySelector(
-          ".custom-look-up-window"
-        ).value;
-        const returnSize = customFilterDiv.querySelector(
-          ".custom-return-size"
-        ).value;
-
-        const customFilter = {
-          label: filterName,
-          class: "CustomFilter",
-          options: [],
-        };
-
-        if (selectedCalendar) {
-          customFilter.options.push({
-            label: "Calendar",
-            property: "calendar",
-            type: "calendar",
-            value: selectedCalendar,
-          });
-        }
-
-        if (lookUpWindow) {
-          customFilter.options.push({
-            label: "Look up window",
-            property: "look_up_window",
-            type: "number",
-            value: lookUpWindow,
-          });
-        }
-
-        if (returnSize) {
-          customFilter.options.push({
-            label: "Return size",
-            property: "return_size",
-            type: "number",
-            value: returnSize,
-          });
-        }
-
-        settings.filters.push(customFilter);
-
-        // Update the filters dropdown in the form
-        const filtersSelect = document.getElementById("filters-select");
-        const optionEl = document.createElement("option");
-        optionEl.value = filterName;
-        optionEl.innerHTML = filterName;
-        filtersSelect.appendChild(optionEl);
-
-        customFiltersContainer.removeChild(customFilterDiv);
-      });
-
     // Delete custom filter
     customFilterDiv
       .querySelector(".delete-custom-filter")
@@ -320,6 +257,7 @@ document.addEventListener("DOMContentLoaded", function () {
         customFilterDiv.remove();
       });
 
-    customFiltersContainer.appendChild(customFilterDiv);
+    // Prepend the custom filter to the container
+    customFiltersContainer.prepend(customFilterDiv);
   };
 });
