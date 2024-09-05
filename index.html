@@ -1,80 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Strategy Selector</title>
-    <link rel="stylesheet" href="./index.css" />
-    <link
-      rel="shortcut icon"
-      href="./assets/logo-favicon.ico"
-      type="image/x-icon"
-    />
-  </head>
-  <body>
-    <div class="form-container">
-      <h1>Strategies</h1>
-      <form id="strategyForm">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filter Form</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+  <form id="strategyForm">
+    <div>
+      <label for="strategy-name">Strategy:</label>
+      <input type="text" id="strategy-name" name="strategy" />
+    </div>
+    <div>
+      <label for="universe">Universe:</label>
+      <select id="universe" name="universe"></select>
+    </div>
+    <div>
+      <label for="class">Class:</label>
+      <select id="class" name="class"></select>
+    </div>
+    <div id="filters-section">
+      <div id="filter-default" style="display: none;">
         <div class="form-group">
-          <label for="strategy-name">Strategy Name</label>
-          <input
-            type="text"
-            id="strategy-name"
-            placeholder="Enter your strategy"
-          />
-        </div>
-        <div class="form-group">
-          <label for="universe">Universe</label>
-          <select id="universe">
-            <option value="" selected>Select Universe</option>
+          <label for="filter-type">Filter:</label>
+          <select id="filters-select">
+            <option value="">Select Filter</option>
           </select>
         </div>
-        <div class="form-group">
-          <label for="class">Class</label>
-          <select id="class">
-            <option value="" selected>Select Class</option>
-          </select>
-        </div>
-        <div id="filters-section">
-          <label for="filters-select">Filters</label>
-          <div class="form-group">
-            <div
-              id="filter-default"
-              style="
-                display: none;
-                margin: 5px;
-                padding: 5px;
-                border: solid #eee 1px;
-              "
-            >
-              <select id="filters-select">
-                <option value="" disabled selected>Select Filter</option>
-              </select>
-              <div class="filter-options"></div>
-            </div>
-            <div>
-              <br />
-              <button id="addFilter" type="button">Add Filter</button>
-            </div>
-          </div>
-          <div id="custom-filters-section">
-            <button id="addCustomFilter" type="button">
-              + Add Custom Filter
-            </button>
-            <div id="custom-filters-container"></div>
-          </div>
-        </div>
-        <div id="details">
-          <!-- Strategy details will be displayed here -->
-        </div>
-
-        <!-- Save Button -->
-        <div class="form-group">
-          <button id="saveStrategy" type="submit" style="margin-top: 10px">
-            Save
-          </button>
-        </div>
-      </form>
+      </div>
+      <!-- Filter instances will be added here -->
+    </div>
+    <button type="button" id="addFilter">Add Filter</button>
+    <button type="button" id="addCustomFilter">Add Custom Filter</button>
+    <div id="custom-filters-container"></div>
+    <button type="submit">Save</button>
+  </form>
     </div>
     <script src="index.js"></script>
   </body>
