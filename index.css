@@ -48,6 +48,14 @@ h1 {
   outline: none;
 }
 
+/* Button container styles */
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Space between buttons */
+  margin-top: 20px;
+}
+
 /* Button styles */
 .form-button {
   background: linear-gradient(90deg, #007bff, #0056b3);
@@ -57,16 +65,28 @@ h1 {
   border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s, transform 0.2s;
+  font-weight: 500;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+  flex: 1 1 auto; /* Allows buttons to grow and shrink as needed */
+  max-width: 150px; /* Ensures buttons don’t get too wide */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-button i {
+  margin-right: 8px; /* Space between icon and text */
 }
 
 .form-button:hover {
-  background-color: #0056b3;
+  background: linear-gradient(90deg, #0056b3, #00408a);
   transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .form-button:active {
   transform: translateY(0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .form-button.delete {
@@ -74,7 +94,17 @@ h1 {
 }
 
 .form-button.delete:hover {
-  background-color: #c82333;
+  background: linear-gradient(90deg, #c82333, #a71d2a);
+}
+
+.form-button.delete:active {
+  background: linear-gradient(90deg, #a71d2a, #8a1c1c);
+}
+
+/* Focus state for better accessibility */
+.form-button:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 4px;
 }
 
 /* Filters section styles */
@@ -130,7 +160,7 @@ h1 {
 }
 
 .custom-filter .delete-button:hover {
-  background-color: #c82333;
+  background: linear-gradient(90deg, #c82333, #a71d2a);
   transform: translateY(-2px);
 }
 
@@ -183,6 +213,7 @@ h1 {
   .form-button {
     padding: 10px 16px;
     font-size: 14px;
+    max-width: none; /* Remove max-width for responsive layout */
   }
 
   #filters-section {
