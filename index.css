@@ -1,3 +1,10 @@
+/* styles.css */
+
+/* General form styles */
+form {
+  font-family: Arial, sans-serif;
+}
+
 .form-container {
   max-width: 800px;
   margin: 20px auto;
@@ -19,29 +26,31 @@ h1 {
 .form-group label {
   display: block;
   margin-bottom: 5px;
-  font-weight: bold;
 }
 
-.form-input,
-.form-select {
+.form-group input,
+.form-group select {
   width: 100%;
   padding: 8px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
+/* Button styles */
 .form-button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
   background-color: #007bff;
-  color: #fff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
   cursor: pointer;
   margin: 5px;
 }
 
 .form-button:hover {
-  background-color: #0056b3;
+  opacity: 0.9;
 }
 
 .form-button.delete {
@@ -49,10 +58,10 @@ h1 {
 }
 
 .form-button.delete:hover {
-  background-color: #c82333;
+  opacity: 0.9;
 }
 
-
+/* Filters section styles */
 #filters-section {
   margin-top: 20px;
 }
@@ -61,32 +70,48 @@ h1 {
   margin-bottom: 10px;
 }
 
-.form-button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: #fff;
-  cursor: pointer;
+/* Custom filter styles */
+.custom-filter {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
 }
 
-.form-button:hover {
-  background-color: #0056b3;
+.custom-filter label {
+  margin: 0 0 5px;
 }
 
-#custom-filters-container {
-  margin-top: 20px;
-}
-
-.custom-filter-name,
-.custom-filter-options {
-  width: calc(100% - 16px);
+.custom-filter input,
+.custom-filter select {
+  width: 100%;
   padding: 8px;
+  box-sizing: border-box;
 }
 
-.save-custom-filter,
-.delete-custom-filter {
-  margin: 5px 5px 0 0;
+.custom-filter .delete-button {
+  margin-top: 10px;
+}
+
+/* Message styles */
+.message {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 14px;
+  z-index: 1000;
+}
+
+.message.success {
+  background-color: #28a745;
+}
+
+.message.error {
+  background-color: #dc3545;
 }
 
 /* Responsive Styles for screens with max-width 1024px */
@@ -105,8 +130,8 @@ h1 {
     margin-bottom: 15px;
   }
 
-  .form-input,
-  .form-select {
+  .form-group input,
+  .form-group select {
     padding: 6px;
   }
 
@@ -122,14 +147,17 @@ h1 {
     margin-bottom: 8px;
   }
 
-  .custom-filter-name,
-  .custom-filter-options {
+  .custom-filter {
+    padding: 8px;
+  }
+
+  .custom-filter input,
+  .custom-filter select {
     padding: 6px;
   }
 
-  .save-custom-filter,
-  .delete-custom-filter {
-    margin: 3px 3px 0 0;
-    padding: 8px 12px;
+  .custom-filter .delete-button {
+    margin-top: 5px;
+    padding: 6px 10px;
   }
 }
