@@ -203,10 +203,12 @@ document.addEventListener("DOMContentLoaded", function () {
     deleteButton.type = "button";
     deleteButton.onclick = () => {
       el.remove();
+      showMessage("Filter deleted.", "info");
     };
     el.appendChild(deleteButton);
 
     filterDefaultDiv.parentNode.prepend(el);
+    showMessage("Filter added!", "success");
   };
 
   addCustomFilterButton.onclick = () => {
@@ -247,10 +249,12 @@ document.addEventListener("DOMContentLoaded", function () {
     deleteButton.type = "button";
     deleteButton.onclick = () => {
       customFilterDiv.remove();
+      showMessage("Custom filter deleted.", "info");
     };
     customFilterDiv.appendChild(deleteButton);
 
     customFiltersContainer.appendChild(customFilterDiv);
+    showMessage("Custom filter added!", "success");
   };
 
   document.getElementById("strategyForm").onsubmit = function (ev) {
@@ -303,6 +307,17 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
+    // Check for missing fields and display error message
+    let errorMessage = "";
+    if (!formData.strategy || !formData.universe || !formData.class) {
+      errorMessage += "Please fill out all required fields.\n";
+    }
+
+    if (errorMessage) {
+      showMessage(errorMessage, "error");
+      return;
+    }
+
     // Create a JSON string from the form data
     const jsonData = JSON.stringify(formData, null, 2);
 
@@ -320,5 +335,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Remove the link from the DOM
     document.body.removeChild(link);
+
+    // Show success message
+    showMessage("Form data saved successfully!", "success");
   };
+
+  // Function to show messages
+  function showMessage(message, type) {
+    const messageBox = document.createElement("div");
+    messageBox.innerText = message;
+    messageBox.className = `message ${type}`;
+    document.body.appendChild(messageBox);
+
+    // Automatically remove the message after 3 seconds
+    setTimeout(() => {
+      messageBox.remove();
+    }, 3000);
+  }
 });

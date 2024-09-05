@@ -1,44 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Filter Form</title>
-  <link rel="stylesheet" href="./index.css">
-</head>
-<body>
-  <div class="form-container">
-    <form id="strategyForm">
-      <h1>Strategy Form</h1>
-      <div class="form-group">
-        <label for="strategy-name">Strategy:</label>
-        <input type="text" id="strategy-name" name="strategy" class="form-input"/>
-      </div>
-      <div class="form-group">
-        <label for="universe">Universe:</label>
-        <select id="universe" name="universe" class="form-select"></select>
-      </div>
-      <div class="form-group">
-        <label for="class">Class:</label>
-        <select id="class" name="class" class="form-select"></select>
-      </div>
-      <div id="filters-section">
-        <div id="filter-default" style="display: none;">
-          <div class="form-group">
-            <label for="filter-type">Filter:</label>
-            <select id="filters-select" class="form-select">
-              <option value="">Select Filter</option>
-            </select>
-          </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Strategy</title>
+    <link rel="stylesheet" href="./index.css" />
+    <link
+      rel="shortcut icon"
+      href="./assets/logo-favicon.ico"
+      type="image/x-icon"
+    />
+  </head>
+  <body>
+    <div class="form-container">
+      <form id="strategyForm">
+        <h1>Strategy Form</h1>
+        <div class="form-group">
+          <label for="strategy-name">Strategy:</label>
+          <input
+            type="text"
+            id="strategy-name"
+            name="strategy"
+            class="form-input"
+            placeholder="Enter your strategy"
+          />
         </div>
-        <!-- Filter instances will be added here -->
-      </div>
-      <button type="button" id="addFilter" class="form-button">Add Filter</button>
-      <button type="button" id="addCustomFilter" class="form-button">Add Custom Filter</button>
-      <div id="custom-filters-container"></div>
-      <button type="submit" class="form-button">Save</button>
-    </form>
-  </div>
-  <script src="index.js"></script>
-</body>
+        <div class="form-group">
+          <label for="universe">Universe:</label>
+          <select id="universe" name="universe" class="form-select"></select>
+        </div>
+        <div class="form-group">
+          <label for="class">Class:</label>
+          <select id="class" name="class" class="form-select"></select>
+        </div>
+        <div id="filters-section">
+          <div id="filter-default" style="display: none">
+            <div class="form-group">
+              <label for="filter-type">Filter:</label>
+              <select id="filters-select" class="form-select">
+                <option value="">Select Filter</option>
+              </select>
+            </div>
+          </div>
+          <!-- Filter instances will be added here -->
+        </div>
+        <button type="button" id="addFilter" class="form-button">
+          Add Filter
+        </button>
+        <button type="button" id="addCustomFilter" class="form-button">
+          Add Custom Filter
+        </button>
+        <div id="custom-filters-container"></div>
+        <button type="submit" class="form-button">Save</button>
+      </form>
+    </div>
+    <script src="index.js"></script>
+  </body>
 </html>
