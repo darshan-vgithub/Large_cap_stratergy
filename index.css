@@ -1,184 +1,109 @@
+/* styles.css */
+
 /* General form styles */
 form {
-  font-family: "Roboto", sans-serif;
-  color: #333;
+  font-family: Arial, sans-serif;
 }
 
 .form-container {
   max-width: 800px;
-  margin: 30px auto;
-  padding: 30px;
+  margin: 20px auto;
+  padding: 20px;
   background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-  font-size: 28px;
-  margin-bottom: 30px;
-  color: #007bff;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
+  margin-bottom: 5px;
 }
 
-.form-input,
-.form-select {
+.form-group input,
+.form-group select {
   width: 100%;
-  padding: 12px;
+  padding: 8px;
   box-sizing: border-box;
   margin-bottom: 10px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.form-input:focus,
-.form-select:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
-  outline: none;
-}
-
-/* Button container styles */
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px; /* Space between buttons */
-  margin-top: 20px;
+  border-radius: 4px;
 }
 
 /* Button styles */
 .form-button {
-  background: linear-gradient(90deg, #007bff, #0056b3);
+  background-color: #007bff;
   color: white;
   border: none;
-  padding: 12px 20px;
-  border-radius: 6px;
+  padding: 10px 15px;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 500;
-  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
-  flex: 1; /* Allows buttons to grow equally */
-  max-width: 150px; /* Ensures buttons don’t get too wide */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.form-button i {
-  margin-right: 8px; /* Space between icon and text */
+  margin: 5px;
 }
 
 .form-button:hover {
-  background: linear-gradient(90deg, #0056b3, #00408a);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.form-button:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  opacity: 0.9;
 }
 
 .form-button.delete {
-  background: linear-gradient(90deg, #dc3545, #c82333);
+  background-color: #dc3545;
 }
 
 .form-button.delete:hover {
-  background: linear-gradient(90deg, #c82333, #a71d2a);
-}
-
-.form-button.delete:active {
-  background: linear-gradient(90deg, #a71d2a, #8a1c1c);
-}
-
-/* Focus state for better accessibility */
-.form-button:focus {
-  outline: 2px solid #007bff;
-  outline-offset: 4px;
+  opacity: 0.9;
 }
 
 /* Filters section styles */
 #filters-section {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 #filter-default {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 /* Custom filter styles */
 .custom-filter {
-  margin: 15px 0;
-  padding: 15px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   background-color: #f9f9f9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s;
-}
-
-.custom-filter:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .custom-filter label {
-  margin: 0 0 8px;
-  font-weight: 500;
+  margin: 0 0 5px;
 }
 
 .custom-filter input,
 .custom-filter select {
   width: 100%;
-  padding: 10px;
+  padding: 8px;
   box-sizing: border-box;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
 }
 
 .custom-filter .delete-button {
-  margin-top: 12px;
-  padding: 10px 16px;
-  background: linear-gradient(90deg, #dc3545, #c82333);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-.custom-filter .delete-button:hover {
-  background: linear-gradient(90deg, #c82333, #a71d2a);
-  transform: translateY(-2px);
-}
-
-.custom-filter .delete-button:active {
-  transform: translateY(0);
+  margin-top: 10px;
 }
 
 /* Message styles */
 .message {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 15px;
-  border-radius: 8px;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  border-radius: 5px;
   color: #fff;
-  font-size: 16px;
+  font-size: 14px;
   z-index: 1000;
-  transition: opacity 0.5s ease;
 }
 
 .message.success {
@@ -192,54 +117,47 @@ h1 {
 /* Responsive Styles for screens with max-width 1024px */
 @media only screen and (max-width: 1024px) {
   .form-container {
-    padding: 20px;
-    margin: 20px auto;
+    padding: 15px;
+    margin: 15px auto;
   }
 
   h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 22px;
+    margin-bottom: 15px;
   }
 
   .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
 
-  .form-input,
-  .form-select {
-    padding: 10px;
-  }
-
-  .button-container {
-    flex-direction: column; /* Stack buttons vertically on smaller screens */
-    gap: 10px; /* Space between stacked buttons */
+  .form-group input,
+  .form-group select {
+    padding: 6px;
   }
 
   .form-button {
-    padding: 10px 16px;
-    font-size: 14px;
-    max-width: none; /* Remove max-width for responsive layout */
+    padding: 8px 12px;
   }
 
   #filters-section {
-    margin-top: 20px;
+    margin-top: 15px;
   }
 
   #filter-default {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   .custom-filter {
-    padding: 12px;
+    padding: 8px;
   }
 
   .custom-filter input,
   .custom-filter select {
-    padding: 8px;
+    padding: 6px;
   }
 
   .custom-filter .delete-button {
-    margin-top: 10px;
-    padding: 8px 14px;
+    margin-top: 5px;
+    padding: 6px 10px;
   }
 }
