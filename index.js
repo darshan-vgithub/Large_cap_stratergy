@@ -177,6 +177,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectEl = el.querySelector("select");
     selectEl.addEventListener("change", filterTypeSelected);
 
+    // Clear existing options
+    selectEl.innerHTML = "";
+
+    // Add the default option
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
     defaultOption.innerHTML = "Select Filter";
@@ -184,6 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
     defaultOption.selected = true;
     selectEl.appendChild(defaultOption);
 
+    // Add filter options from settings
     settings.filters.forEach((o) => {
       const option = document.createElement("option");
       option.value = o.label;
@@ -193,6 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
+    deleteButton.className = "form-button delete"; // Add delete class
     deleteButton.style.marginLeft = "10px";
     deleteButton.type = "button";
     deleteButton.onclick = () => {
@@ -212,17 +218,17 @@ document.addEventListener("DOMContentLoaded", function () {
     customFilterDiv.style.backgroundColor = "#f9f9f9";
 
     customFilterDiv.innerHTML = `
-          <label style="display: block; margin-bottom: 5px;">Custom Filter Name:</label>
-          <input type="text" class="custom-filter-name" placeholder="Filter Name" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-          <label style="display: block; margin: 10px 0 5px;">Calendar:</label>
-          <select class="custom-calendar-select" style="width: 100%; padding: 8px; box-sizing: border-box;">
-            <option value="">Select Calendar</option>
-          </select>
-          <label style="display: block; margin: 10px 0 5px;">Look up window:</label>
-          <input type="number" class="custom-look-up-window" placeholder="Look up window" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-          <label style="display: block; margin: 10px 0 5px;">Return size:</label>
-          <input type="number" class="custom-return-size" placeholder="Return size" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-        `;
+    <label style="display: block; margin-bottom: 5px;">Custom Filter Name:</label>
+    <input type="text" class="custom-filter-name" placeholder="Filter Name" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+    <label style="display: block; margin: 10px 0 5px;">Calendar:</label>
+    <select class="custom-calendar-select" style="width: 100%; padding: 8px; box-sizing: border-box;">
+      <option value="">Select Calendar</option>
+    </select>
+    <label style="display: block; margin: 10px 0 5px;">Look up window:</label>
+    <input type="number" class="custom-look-up-window" placeholder="Look up window" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+    <label style="display: block; margin: 10px 0 5px;">Return size:</label>
+    <input type="number" class="custom-return-size" placeholder="Return size" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+  `;
 
     const calendarSelect = customFilterDiv.querySelector(
       ".custom-calendar-select"
@@ -236,6 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
+    deleteButton.className = "form-button delete"; // Add delete class
     deleteButton.style.marginTop = "10px";
     deleteButton.type = "button";
     deleteButton.onclick = () => {

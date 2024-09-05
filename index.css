@@ -30,6 +30,29 @@ h1 {
   border-radius: 4px;
 }
 
+.form-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.form-button:hover {
+  background-color: #0056b3;
+}
+
+.form-button.delete {
+  background-color: #dc3545;
+}
+
+.form-button.delete:hover {
+  background-color: #c82333;
+}
+
+
 #filters-section {
   margin-top: 20px;
 }
