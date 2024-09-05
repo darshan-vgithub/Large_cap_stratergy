@@ -1,109 +1,154 @@
-/* styles.css */
-
 /* General form styles */
 form {
-  font-family: Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
+  color: #333;
 }
 
 .form-container {
   max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
+  margin: 30px auto;
+  padding: 30px;
   background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: #007bff;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  font-weight: 500;
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
-  padding: 8px;
+  padding: 12px;
   box-sizing: border-box;
   margin-bottom: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+  outline: none;
 }
 
 /* Button styles */
 .form-button {
-  background-color: #007bff;
+  background: linear-gradient(90deg, #007bff, #0056b3);
   color: white;
   border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
+  padding: 12px 20px;
+  border-radius: 6px;
   cursor: pointer;
-  margin: 5px;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .form-button:hover {
-  opacity: 0.9;
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.form-button:active {
+  transform: translateY(0);
 }
 
 .form-button.delete {
-  background-color: #dc3545;
+  background: linear-gradient(90deg, #dc3545, #c82333);
 }
 
 .form-button.delete:hover {
-  opacity: 0.9;
+  background-color: #c82333;
 }
 
 /* Filters section styles */
 #filters-section {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 #filter-default {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 /* Custom filter styles */
 .custom-filter {
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  margin: 15px 0;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
   background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+}
+
+.custom-filter:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .custom-filter label {
-  margin: 0 0 5px;
+  margin: 0 0 8px;
+  font-weight: 500;
 }
 
 .custom-filter input,
 .custom-filter select {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
   box-sizing: border-box;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
 }
 
 .custom-filter .delete-button {
-  margin-top: 10px;
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: linear-gradient(90deg, #dc3545, #c82333);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.custom-filter .delete-button:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
+
+.custom-filter .delete-button:active {
+  transform: translateY(0);
 }
 
 /* Message styles */
 .message {
   position: fixed;
-  top: 10px;
-  right: 10px;
-  padding: 10px;
-  border-radius: 5px;
+  top: 20px;
+  right: 20px;
+  padding: 15px;
+  border-radius: 8px;
   color: #fff;
-  font-size: 14px;
+  font-size: 16px;
   z-index: 1000;
+  transition: opacity 0.5s ease;
 }
 
 .message.success {
@@ -117,47 +162,48 @@ h1 {
 /* Responsive Styles for screens with max-width 1024px */
 @media only screen and (max-width: 1024px) {
   .form-container {
-    padding: 15px;
-    margin: 15px auto;
+    padding: 20px;
+    margin: 20px auto;
   }
 
   h1 {
-    font-size: 22px;
-    margin-bottom: 15px;
+    font-size: 24px;
+    margin-bottom: 20px;
   }
 
   .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
   }
 
   .form-group input,
   .form-group select {
-    padding: 6px;
+    padding: 10px;
   }
 
   .form-button {
-    padding: 8px 12px;
+    padding: 10px 16px;
+    font-size: 14px;
   }
 
   #filters-section {
-    margin-top: 15px;
+    margin-top: 20px;
   }
 
   #filter-default {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
   }
 
   .custom-filter {
-    padding: 8px;
+    padding: 12px;
   }
 
   .custom-filter input,
   .custom-filter select {
-    padding: 6px;
+    padding: 8px;
   }
 
   .custom-filter .delete-button {
-    margin-top: 5px;
-    padding: 6px 10px;
+    margin-top: 10px;
+    padding: 8px 14px;
   }
 }
