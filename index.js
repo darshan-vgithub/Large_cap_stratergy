@@ -122,7 +122,6 @@ function filterTypeSelected(ev) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Existing code...
   const strategySelect = document.getElementById("strategy-name");
   const universeSelect = document.getElementById("universe");
   const classSelect = document.getElementById("class");
@@ -267,24 +266,20 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     // Collect filter data
-    const filterGroups = document.querySelectorAll(
-      "#filters-section > .form-group"
-    );
+    const filterGroups = document.querySelectorAll("#filters-section > div");
     filterGroups.forEach((group) => {
-      const selectElement = group.querySelector("select");
-      const selectedFilter = selectElement.value;
-
-      const options = {};
-      group.querySelectorAll("input, select").forEach((input) => {
-        if (input.name) {
-          options[input.name] = input.value;
-        }
-      });
-
-      formData.filters.push({
-        filterName: selectedFilter,
-        options: options,
-      });
+      const filterName = group.querySelector("select").value;
+      if (filterName) {
+        const filterOptions = {};
+        const inputs = group.querySelectorAll("input, select");
+        inputs.forEach((input) => {
+          filterOptions[input.name] = input.value;
+        });
+        formData.filters.push({
+          filterName: filterName,
+          options: filterOptions,
+        });
+      }
     });
 
     // Collect custom filter data
@@ -305,7 +300,22 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 
-    // Log the form data to the console
-    console.log(formData);
+    // Create a JSON string from the form data
+    const jsonData = JSON.stringify(formData, null, 2);
+
+    // Create a Blob from the JSON string
+    const blob = new Blob([jsonData], { type: "application/json" });
+
+    // Create a link element to download the Blob
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "data.json"; // This will be the name of the downloaded file
+    document.body.appendChild(link);
+
+    // Automatically click the link to trigger the download
+    link.click();
+
+    // Remove the link from the DOM
+    document.body.removeChild(link);
   });
 });
