@@ -122,6 +122,7 @@ function filterTypeSelected(ev) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  // Existing code...
   const strategySelect = document.getElementById("strategy-name");
   const universeSelect = document.getElementById("universe");
   const classSelect = document.getElementById("class");
@@ -176,24 +177,20 @@ document.addEventListener("DOMContentLoaded", function () {
   classSelect.dispatchEvent(new Event("change"));
 
   addFilter.onclick = (ev) => {
-    // Clone the filterDefaultDiv without its children
     const el = filterDefaultDiv.cloneNode(false);
     el.id = "filter-" + new Date().getTime();
     el.style.display = "block";
 
-    // Create a select element to hold the filter options
     const selectEl = document.createElement("select");
     selectEl.addEventListener("change", filterTypeSelected);
 
-    // Add a default "Select Filter" option
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
     defaultOption.innerHTML = "Select Filter";
     defaultOption.disabled = true;
-    defaultOption.selected = true; // Set as selected by default
+    defaultOption.selected = true;
     selectEl.appendChild(defaultOption);
 
-    // Populate the select element with filter options
     settings.filters.forEach((o) => {
       const option = document.createElement("option");
       option.value = o.label;
@@ -203,7 +200,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     el.appendChild(selectEl);
 
-    // Create and append the delete button
     const deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
     deleteButton.style.marginLeft = "10px";
@@ -213,7 +209,6 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     el.appendChild(deleteButton);
 
-    // Prepend the newly created filter section to the container
     filterDefaultDiv.parentNode.prepend(el);
   };
 
@@ -226,20 +221,19 @@ document.addEventListener("DOMContentLoaded", function () {
     customFilterDiv.style.backgroundColor = "#f9f9f9";
 
     customFilterDiv.innerHTML = `
-    <label style="display: block; margin-bottom: 5px;">Custom Filter Name:</label>
-    <input type="text" class="custom-filter-name" placeholder="Filter Name" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-    <label style="display: block; margin: 10px 0 5px;">Calendar:</label>
-    <select class="custom-calendar-select" style="width: 100%; padding: 8px; box-sizing: border-box;">
-      <option value="">Select Calendar</option>
-    </select>
-    <label style="display: block; margin: 10px 0 5px;">Look up window:</label>
-    <input type="number" class="custom-look-up-window" placeholder="Look up window" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-    <label style="display: block; margin: 10px 0 5px;">Return size:</label>
-    <input type="number" class="custom-return-size" placeholder="Return size" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-    <button type="button" class="delete-custom-filter" style="margin-top: 10px; padding: 10px 15px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;">Delete</button>
-  `;
+      <label style="display: block; margin-bottom: 5px;">Custom Filter Name:</label>
+      <input type="text" class="custom-filter-name" placeholder="Filter Name" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+      <label style="display: block; margin: 10px 0 5px;">Calendar:</label>
+      <select class="custom-calendar-select" style="width: 100%; padding: 8px; box-sizing: border-box;">
+        <option value="">Select Calendar</option>
+      </select>
+      <label style="display: block; margin: 10px 0 5px;">Look up window:</label>
+      <input type="number" class="custom-look-up-window" placeholder="Look up window" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+      <label style="display: block; margin: 10px 0 5px;">Return size:</label>
+      <input type="number" class="custom-return-size" placeholder="Return size" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+      <button type="button" class="delete-custom-filter" style="margin-top: 10px; padding: 10px 15px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;">Delete</button>
+    `;
 
-    // Populate the calendar select field
     const calendarSelect = customFilterDiv.querySelector(
       ".custom-calendar-select"
     );
@@ -250,14 +244,68 @@ document.addEventListener("DOMContentLoaded", function () {
       calendarSelect.appendChild(optionEl);
     });
 
-    // Delete custom filter
     customFilterDiv
       .querySelector(".delete-custom-filter")
       .addEventListener("click", () => {
         customFilterDiv.remove();
       });
 
-    // Prepend the custom filter to the container
     customFiltersContainer.prepend(customFilterDiv);
   };
+
+  // Event listener for form submission
+  const form = document.getElementById("strategyForm");
+  form.addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent form from submitting the traditional way
+
+    const formData = {
+      strategyName: strategySelect.value,
+      universe: universeSelect.value,
+      class: classSelect.value,
+      filters: [],
+      customFilters: [],
+    };
+
+    // Collect filter data
+    const filterGroups = document.querySelectorAll(
+      "#filters-section > .form-group"
+    );
+    filterGroups.forEach((group) => {
+      const selectElement = group.querySelector("select");
+      const selectedFilter = selectElement.value;
+
+      const options = {};
+      group.querySelectorAll("input, select").forEach((input) => {
+        if (input.name) {
+          options[input.name] = input.value;
+        }
+      });
+
+      formData.filters.push({
+        filterName: selectedFilter,
+        options: options,
+      });
+    });
+
+    // Collect custom filter data
+    const customFilterDivs = document.querySelectorAll(
+      "#custom-filters-container > div"
+    );
+    customFilterDivs.forEach((div) => {
+      const customFilterName = div.querySelector(".custom-filter-name").value;
+      const calendar = div.querySelector(".custom-calendar-select").value;
+      const lookupWindow = div.querySelector(".custom-look-up-window").value;
+      const returnSize = div.querySelector(".custom-return-size").value;
+
+      formData.customFilters.push({
+        customFilterName: customFilterName,
+        calendar: calendar,
+        lookupWindow: lookupWindow,
+        returnSize: returnSize,
+      });
+    });
+
+    // Log the form data to the console
+    console.log(formData);
+  });
 });
