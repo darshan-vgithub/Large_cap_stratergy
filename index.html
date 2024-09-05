@@ -10,10 +10,6 @@
       href="./assets/logo-favicon.ico"
       type="image/x-icon"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
   </head>
   <body>
     <div class="form-container">
@@ -48,17 +44,14 @@
           </div>
           <!-- Filter instances will be added here -->
         </div>
-        <div class="button-container">
-          <button type="button" id="addFilter" class="form-button">
-            <i class="fas fa-filter"></i> Add Filter
-          </button>
-          <button type="button" id="addCustomFilter" class="form-button">
-            <i class="fas fa-plus-circle"></i> Add Custom Filter
-          </button>
-          <button type="submit" class="form-button">
-            <i class="fas fa-save"></i> Save
-          </button>
-        </div>
+        <button type="button" id="addFilter" class="form-button">
+          Add Filter
+        </button>
+        <button type="button" id="addCustomFilter" class="form-button">
+          Add Custom Filter
+        </button>
+        <div id="custom-filters-container"></div>
+        <button type="submit" class="form-button">Save</button>
       </form>
     </div>
     <script src="index.js"></script>
