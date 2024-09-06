@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ],
       },
       {
-        label: "PositiveMovementFilter",
+        label: "Positive Movement Filter",
         class: "PositiveMovementFilter",
         options: [
           {
@@ -60,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ],
   };
 
-  // Function to create number input fields
   function createNumberInput(el, options) {
     const inputEl = document.createElement("input");
     inputEl.type = "number";
@@ -75,7 +74,6 @@ document.addEventListener("DOMContentLoaded", function () {
     el.parentNode.appendChild(divEl);
   }
 
-  // Function to create calendar select fields
   function createCalendarInput(el, options) {
     const selectEl = document.createElement("select");
     selectEl.name = options.property;
@@ -95,7 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
     el.parentNode.appendChild(divEl);
   }
 
-  // Function to handle filter type selection
   function filterTypeSelected(ev) {
     const filterContainer = ev.target.closest(".form-group");
     const existingOptions = filterContainer.querySelectorAll(
@@ -120,8 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Initialize selects with settings data
-  const strategySelect = document.getElementById("strategy-name");
+  const strategyInput = document.getElementById("strategy-name");
   const universeSelect = document.getElementById("universe");
   const classSelect = document.getElementById("class");
   const filtersSection = document.getElementById("filters-section");
@@ -177,10 +173,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectEl = el.querySelector("select");
     selectEl.addEventListener("change", filterTypeSelected);
 
-    // Clear existing options
     selectEl.innerHTML = "";
 
-    // Add the default option
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
     defaultOption.innerHTML = "Select Filter";
@@ -188,7 +182,6 @@ document.addEventListener("DOMContentLoaded", function () {
     defaultOption.selected = true;
     selectEl.appendChild(defaultOption);
 
-    // Add filter options from settings
     settings.filters.forEach((o) => {
       const option = document.createElement("option");
       option.value = o.label;
@@ -198,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
-    deleteButton.className = "form-button delete"; // Add delete class
+    deleteButton.className = "form-button delete";
     deleteButton.style.marginLeft = "10px";
     deleteButton.type = "button";
     deleteButton.onclick = () => {
@@ -220,141 +213,103 @@ document.addEventListener("DOMContentLoaded", function () {
     customFilterDiv.style.backgroundColor = "#f9f9f9";
 
     customFilterDiv.innerHTML = `
-    <label style="display: block; margin-bottom: 5px;">Custom Filter Name:</label>
-    <input type="text" class="custom-filter-name" placeholder="Filter Name" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-    <label style="display: block; margin: 10px 0 5px;">Calendar:</label>
-    <select class="custom-calendar-select" style="width: 100%; padding: 8px; box-sizing: border-box;">
-      <option value="">Select Calendar</option>
-    </select>
-    <label style="display: block; margin: 10px 0 5px;">Look up window:</label>
-    <input type="number" class="custom-look-up-window" placeholder="Look up window" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-    <label style="display: block; margin: 10px 0 5px;">Return size:</label>
-    <input type="number" class="custom-return-size" placeholder="Return size" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-  `;
+      <label style="display: block; margin-bottom: 5px;">Custom Filter Name:</label>
+      <input type="text" class="custom-filter-name" placeholder="Filter Name" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+      <label style="display: block; margin: 10px 0 5px;">Calendar:</label>
+      <select class="custom-calendar-select" style="width: 100%; padding: 8px; box-sizing: border-box;">
+        <option value="">Select Calendar</option>
+      </select>
+      <label style="display: block; margin: 10px 0 5px;">Look up window:</label>
+      <input type="number" class="custom-look-up-window" placeholder="Look up window" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+      <label style="display: block; margin: 10px 0 5px;">Return size:</label>
+      <input type="number" class="custom-return-size" placeholder="Return size" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+      <button class="remove-custom-filter" style="margin-top: 10px; padding: 8px 12px; background-color: #f44336; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Remove</button>
+    `;
 
     const calendarSelect = customFilterDiv.querySelector(
       ".custom-calendar-select"
     );
     settings.calendars.forEach((calendar) => {
-      const optionEl = document.createElement("option");
-      optionEl.value = calendar;
-      optionEl.innerText = calendar;
-      calendarSelect.appendChild(optionEl);
+      const option = document.createElement("option");
+      option.value = calendar;
+      option.innerHTML = calendar;
+      calendarSelect.appendChild(option);
     });
 
-    const deleteButton = document.createElement("button");
-    deleteButton.innerText = "Delete";
-    deleteButton.className = "form-button delete"; // Add delete class
-    deleteButton.style.marginTop = "10px";
-    deleteButton.type = "button";
-    deleteButton.onclick = () => {
+    customFilterDiv.querySelector(".remove-custom-filter").onclick = () => {
       customFilterDiv.remove();
-      showMessage("Custom filter deleted.", "info");
+      showMessage("Custom filter removed.", "info");
     };
-    customFilterDiv.appendChild(deleteButton);
 
     customFiltersContainer.appendChild(customFilterDiv);
     showMessage("Custom filter added!", "success");
   };
 
-  document.getElementById("strategyForm").onsubmit = function (ev) {
+  function showMessage(message, type) {
+    const messageContainer = document.getElementById("message-container");
+    messageContainer.innerHTML = `<p class="${type}">${message}</p>`;
+    setTimeout(() => {
+      messageContainer.innerHTML = "";
+    }, 3000);
+  }
+
+  document.querySelector("form").addEventListener("submit", function (ev) {
     ev.preventDefault();
 
-    const formData = {
-      strategy: document.getElementById("strategy-name").value,
-      universe: document.getElementById("universe").value,
-      class: document.getElementById("class").value,
-      filters: [], // This will be populated later
+    const strategyName = strategyInput.value || "Finance";
+    const jsonObject = {
+      [strategyName]: {
+        class: classSelect.value || "None",
+        universe: universeSelect.value || "",
+        filters: [],
+      },
     };
 
-    document.querySelectorAll("#filters-section > div").forEach((filterDiv) => {
-      const filterSelect = filterDiv.querySelector("select");
-      const filterType = filterSelect.value;
-      if (filterType) {
-        const filter = settings.filters.find((f) => f.label === filterType);
-        const filterData = {
-          label: filter.label,
-          class: filter.class,
+    customFiltersContainer.querySelectorAll("div").forEach((filterDiv) => {
+      const name = filterDiv.querySelector(".custom-filter-name").value;
+      if (name) {
+        const filter = {
+          filter: name,
           options: {},
         };
 
-        filter.options.forEach((o) => {
-          const inputEl = filterDiv.querySelector(
-            `input[name="${o.property}"]`
-          );
-          if (inputEl) {
-            filterData.options[o.property] = inputEl.value;
-          }
-
-          const selectEl = filterDiv.querySelector(
-            `select[name="${o.property}"]`
-          );
-          if (selectEl) {
-            filterData.options[o.property] = selectEl.value;
+        filterDiv.querySelectorAll("input, select").forEach((input) => {
+          const prop = input.name;
+          const value = input.value;
+          if (prop) {
+            filter.options[prop] = value;
           }
         });
 
-        formData.filters.push(filterData);
+        jsonObject[strategyName].filters.push(filter);
       }
     });
 
     document
-      .querySelectorAll("#custom-filters-container > div")
-      .forEach((filterDiv) => {
-        const filterName = filterDiv.querySelector(".custom-filter-name").value;
-        const calendarSelect = filterDiv.querySelector(
-          ".custom-calendar-select"
-        ).value;
-        const lookUpWindow = filterDiv.querySelector(
-          ".custom-look-up-window"
-        ).value;
-        const returnSize = filterDiv.querySelector(".custom-return-size").value;
-
-        if (filterName && calendarSelect) {
-          formData.filters.push({
-            label: filterName,
-            class: "CustomFilter",
-            options: {
-              calendar: calendarSelect,
-              look_up_window: lookUpWindow,
-              return_size: returnSize,
-            },
+      .querySelectorAll("#filters-section .form-group")
+      .forEach((group) => {
+        const selectEl = group.querySelector("select");
+        const filterType = selectEl.value;
+        const filter = settings.filters.find((f) => f.label === filterType);
+        if (filter) {
+          const options = {};
+          filter.options.forEach((o) => {
+            const input = group.querySelector(`[name=${o.property}]`);
+            if (input) {
+              options[o.property] = input.value;
+            }
+          });
+          jsonObject[strategyName].filters.push({
+            filter: filter.class,
+            options,
           });
         }
       });
 
-    const jsonOutput = JSON.stringify(formData, null, 2);
-    const blob = new Blob([jsonOutput], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "filters.json";
-    a.click();
-    URL.revokeObjectURL(url);
-    showMessage("Filters saved as JSON!", "success");
-  };
-
-  function showMessage(message, type) {
-    const messageEl = document.createElement("div");
-    messageEl.innerText = message;
-    messageEl.style.position = "fixed";
-    messageEl.style.top = "20px";
-    messageEl.style.right = "20px";
-    messageEl.style.backgroundColor =
-      type === "success" ? "#d4edda" : "#f8d7da";
-    messageEl.style.color = type === "success" ? "#155724" : "#721c24";
-    messageEl.style.padding = "10px";
-    messageEl.style.borderRadius = "4px";
-    messageEl.style.border = `1px solid ${
-      type === "success" ? "#c3e6cb" : "#f5c6cb"
-    }`;
-    messageEl.style.zIndex = "1000"; // Ensure the message is on top of other elements
-    messageEl.style.boxShadow = "0px 0px 10px rgba(0, 0, 0, 0.1)"; // Optional: add a shadow for better visibility
-
-    document.body.appendChild(messageEl);
-
-    setTimeout(() => {
-      messageEl.remove();
-    }, 3000);
-  }
+    document.getElementById("json-output").textContent = JSON.stringify(
+      jsonObject,
+      null,
+      2
+    );
+  });
 });
