@@ -205,156 +205,86 @@ document.addEventListener("DOMContentLoaded", function () {
       el.remove();
       showMessage("Filter deleted.", "info");
     };
-    el.appendChild(deleteButton);
 
-    filterDefaultDiv.parentNode.prepend(el);
-    showMessage("Filter added!", "success");
+    el.appendChild(deleteButton);
+    customFiltersContainer.appendChild(el);
+    showMessage("Filter added.", "success");
   };
 
   addCustomFilterButton.onclick = () => {
-    const customFilterDiv = document.createElement("div");
-    customFilterDiv.style.margin = "10px 0";
-    customFilterDiv.style.padding = "10px";
-    customFilterDiv.style.border = "1px solid #ccc";
-    customFilterDiv.style.borderRadius = "5px";
-    customFilterDiv.style.backgroundColor = "#f9f9f9";
+    const el = filterDefaultDiv.cloneNode(true);
+    el.id = "custom-filter-" + new Date().getTime();
+    el.style.display = "block";
+    const selectEl = el.querySelector("select");
+    selectEl.addEventListener("change", filterTypeSelected);
+    selectEl.innerHTML = "";
 
-    customFilterDiv.innerHTML = `
-    <label style="display: block; margin-bottom: 5px;">Custom Filter Name:</label>
-    <input type="text" class="custom-filter-name" placeholder="Filter Name" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-    <label style="display: block; margin: 10px 0 5px;">Calendar:</label>
-    <select class="custom-calendar-select" style="width: 100%; padding: 8px; box-sizing: border-box;">
-      <option value="">Select Calendar</option>
-    </select>
-    <label style="display: block; margin: 10px 0 5px;">Look up window:</label>
-    <input type="number" class="custom-look-up-window" placeholder="Look up window" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-    <label style="display: block; margin: 10px 0 5px;">Return size:</label>
-    <input type="number" class="custom-return-size" placeholder="Return size" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-  `;
-
-    const calendarSelect = customFilterDiv.querySelector(
-      ".custom-calendar-select"
-    );
-    settings.calendars.forEach((calendar) => {
-      const optionEl = document.createElement("option");
-      optionEl.value = calendar;
-      optionEl.innerText = calendar;
-      calendarSelect.appendChild(optionEl);
-    });
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.innerHTML = "Select Custom Filter";
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    selectEl.appendChild(defaultOption);
 
     const deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
-    deleteButton.className = "form-button delete"; // Add delete class
-    deleteButton.style.marginTop = "10px";
+    deleteButton.className = "form-button delete";
+    deleteButton.style.marginLeft = "10px";
     deleteButton.type = "button";
     deleteButton.onclick = () => {
-      customFilterDiv.remove();
+      el.remove();
       showMessage("Custom filter deleted.", "info");
     };
-    customFilterDiv.appendChild(deleteButton);
 
-    customFiltersContainer.appendChild(customFilterDiv);
-    showMessage("Custom filter added!", "success");
-  };
-
-  document.getElementById("strategyForm").onsubmit = function (ev) {
-    ev.preventDefault();
-
-    const formData = {
-      strategy: document.getElementById("strategy-name").value,
-      universe: document.getElementById("universe").value,
-      class: document.getElementById("class").value,
-      filters: [], // This will be populated later
-    };
-
-    document.querySelectorAll("#filters-section > div").forEach((filterDiv) => {
-      const filterSelect = filterDiv.querySelector("select");
-      const filterType = filterSelect.value;
-      if (filterType) {
-        const filter = settings.filters.find((f) => f.label === filterType);
-        const filterData = {
-          label: filter.label,
-          class: filter.class,
-          options: {},
-        };
-
-        filter.options.forEach((o) => {
-          const inputEl = filterDiv.querySelector(
-            `input[name="${o.property}"]`
-          );
-          if (inputEl) {
-            filterData.options[o.property] = inputEl.value;
-          }
-
-          const selectEl = filterDiv.querySelector(
-            `select[name="${o.property}"]`
-          );
-          if (selectEl) {
-            filterData.options[o.property] = selectEl.value;
-          }
-        });
-
-        formData.filters.push(filterData);
-      }
-    });
-
-    document
-      .querySelectorAll("#custom-filters-container > div")
-      .forEach((filterDiv) => {
-        const filterName = filterDiv.querySelector(".custom-filter-name").value;
-        const calendarSelect = filterDiv.querySelector(
-          ".custom-calendar-select"
-        ).value;
-        const lookUpWindow = filterDiv.querySelector(
-          ".custom-look-up-window"
-        ).value;
-        const returnSize = filterDiv.querySelector(".custom-return-size").value;
-
-        if (filterName && calendarSelect) {
-          formData.filters.push({
-            label: filterName,
-            class: "CustomFilter",
-            options: {
-              calendar: calendarSelect,
-              look_up_window: lookUpWindow,
-              return_size: returnSize,
-            },
-          });
-        }
-      });
-
-    const jsonOutput = JSON.stringify(formData, null, 2);
-    const blob = new Blob([jsonOutput], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "filters.json";
-    a.click();
-    URL.revokeObjectURL(url);
-    showMessage("Filters saved as JSON!", "success");
+    el.appendChild(deleteButton);
+    customFiltersContainer.appendChild(el);
+    showMessage("Custom filter added.", "success");
   };
 
   function showMessage(message, type) {
     const messageEl = document.createElement("div");
     messageEl.innerText = message;
-    messageEl.style.position = "fixed";
-    messageEl.style.top = "20px";
-    messageEl.style.right = "20px";
-    messageEl.style.backgroundColor =
-      type === "success" ? "#d4edda" : "#f8d7da";
-    messageEl.style.color = type === "success" ? "#155724" : "#721c24";
-    messageEl.style.padding = "10px";
-    messageEl.style.borderRadius = "4px";
-    messageEl.style.border = `1px solid ${
-      type === "success" ? "#c3e6cb" : "#f5c6cb"
-    }`;
-    messageEl.style.zIndex = "1000"; // Ensure the message is on top of other elements
-    messageEl.style.boxShadow = "0px 0px 10px rgba(0, 0, 0, 0.1)"; // Optional: add a shadow for better visibility
-
+    messageEl.className = `message ${type}`;
     document.body.appendChild(messageEl);
-
-    setTimeout(() => {
-      messageEl.remove();
-    }, 3000);
+    setTimeout(() => messageEl.remove(), 3000);
   }
+
+  const form = document.getElementById("strategyForm");
+  form.addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent default form submission
+    const formData = new FormData(form);
+    const data = {};
+    formData.forEach((value, key) => {
+      data[key] = value;
+    });
+
+    // Include custom filters in the JSON output
+    const customFilters = Array.from(
+      customFiltersContainer.querySelectorAll("#filter-default")
+    )
+      .map((filter) => {
+        const filterType = filter.querySelector("select").value;
+        const filterOptions = settings.filters.find(
+          (f) => f.label === filterType
+        );
+        if (filterOptions) {
+          const options = {};
+          filterOptions.options.forEach((opt) => {
+            const input = filter.querySelector(`[name="${opt.property}"]`);
+            if (input) options[opt.property] = input.value;
+          });
+          return { filterType, options };
+        }
+        return null;
+      })
+      .filter(Boolean);
+
+    data.customFilters = customFilters;
+
+    // Display the JSON data in the container
+    const jsonOutputContainer = document.getElementById("json-output");
+    jsonOutputContainer.textContent = JSON.stringify(data, null, 2);
+
+    showMessage("Form data saved successfully.", "success");
+  });
 });
