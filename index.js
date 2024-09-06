@@ -264,92 +264,97 @@ document.addEventListener("DOMContentLoaded", function () {
       strategy: document.getElementById("strategy-name").value,
       universe: document.getElementById("universe").value,
       class: document.getElementById("class").value,
-      filters: [],
-      customFilters: [],
+      filters: [], // This will be populated later
     };
 
-    // Collect filter data
-    const filterDivs = document.querySelectorAll(
-      "#filters-section > div[id^='filter-']"
-    );
-    filterDivs.forEach((div) => {
-      const filterName = div.querySelector("select").value;
-      if (filterName) {
-        const filterOptions = {};
-        const inputs = div.querySelectorAll("input, select");
-        inputs.forEach((input) => {
-          filterOptions[input.name] = input.value;
+    document.querySelectorAll("#filters-section > div").forEach((filterDiv) => {
+      const filterSelect = filterDiv.querySelector("select");
+      const filterType = filterSelect.value;
+      if (filterType) {
+        const filter = settings.filters.find((f) => f.label === filterType);
+        const filterData = {
+          label: filter.label,
+          class: filter.class,
+          options: {},
+        };
+
+        filter.options.forEach((o) => {
+          const inputEl = filterDiv.querySelector(
+            `input[name="${o.property}"]`
+          );
+          if (inputEl) {
+            filterData.options[o.property] = inputEl.value;
+          }
+
+          const selectEl = filterDiv.querySelector(
+            `select[name="${o.property}"]`
+          );
+          if (selectEl) {
+            filterData.options[o.property] = selectEl.value;
+          }
         });
-        formData.filters.push({
-          filterName: filterName,
-          options: filterOptions,
-        });
+
+        formData.filters.push(filterData);
       }
     });
 
-    // Collect custom filter data
-    const customFilterDivs = document.querySelectorAll(
-      "#custom-filters-container > div"
-    );
-    customFilterDivs.forEach((div) => {
-      const customFilterName = div.querySelector(".custom-filter-name").value;
-      const calendar = div.querySelector(".custom-calendar-select").value;
-      const lookupWindow = div.querySelector(".custom-look-up-window").value;
-      const returnSize = div.querySelector(".custom-return-size").value;
+    document
+      .querySelectorAll("#custom-filters-container > div")
+      .forEach((filterDiv) => {
+        const filterName = filterDiv.querySelector(".custom-filter-name").value;
+        const calendarSelect = filterDiv.querySelector(
+          ".custom-calendar-select"
+        ).value;
+        const lookUpWindow = filterDiv.querySelector(
+          ".custom-look-up-window"
+        ).value;
+        const returnSize = filterDiv.querySelector(".custom-return-size").value;
 
-      if (customFilterName) {
-        formData.customFilters.push({
-          customFilterName: customFilterName,
-          calendar: calendar,
-          lookupWindow: lookupWindow,
-          returnSize: returnSize,
-        });
-      }
-    });
+        if (filterName && calendarSelect) {
+          formData.filters.push({
+            label: filterName,
+            class: "CustomFilter",
+            options: {
+              calendar: calendarSelect,
+              look_up_window: lookUpWindow,
+              return_size: returnSize,
+            },
+          });
+        }
+      });
 
-    // Check for missing fields and display error message
-    let errorMessage = "";
-    if (!formData.strategy || !formData.universe || !formData.class) {
-      errorMessage += "Please fill out all required fields.\n";
-    }
-
-    if (errorMessage) {
-      showMessage(errorMessage, "error");
-      return;
-    }
-
-    // Create a JSON string from the form data
-    const jsonData = JSON.stringify(formData, null, 2);
-
-    // Create a Blob from the JSON string
-    const blob = new Blob([jsonData], { type: "application/json" });
-
-    // Create a link element to download the Blob
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "data.json"; // This will be the name of the downloaded file
-    document.body.appendChild(link);
-
-    // Automatically click the link to trigger the download
-    link.click();
-
-    // Remove the link from the DOM
-    document.body.removeChild(link);
-
-    // Show success message
-    showMessage("Form data saved successfully!", "success");
+    const jsonOutput = JSON.stringify(formData, null, 2);
+    const blob = new Blob([jsonOutput], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "filters.json";
+    a.click();
+    URL.revokeObjectURL(url);
+    showMessage("Filters saved as JSON!", "success");
   };
 
-  // Function to show messages
   function showMessage(message, type) {
-    const messageBox = document.createElement("div");
-    messageBox.innerText = message;
-    messageBox.className = `message ${type}`;
-    document.body.appendChild(messageBox);
+    const messageEl = document.createElement("div");
+    messageEl.innerText = message;
+    messageEl.style.position = "fixed";
+    messageEl.style.top = "20px";
+    messageEl.style.right = "20px";
+    messageEl.style.backgroundColor =
+      type === "success" ? "#d4edda" : "#f8d7da";
+    messageEl.style.color = type === "success" ? "#155724" : "#721c24";
+    messageEl.style.padding = "10px";
+    messageEl.style.borderRadius = "4px";
+    messageEl.style.border = `1px solid ${
+      type === "success" ? "#c3e6cb" : "#f5c6cb"
+    }`;
+    messageEl.style.zIndex = "1000"; // Ensure the message is on top of other elements
+    messageEl.style.boxShadow = "0px 0px 10px rgba(0, 0, 0, 0.1)"; // Optional: add a shadow for better visibility
 
-    // Automatically remove the message after 3 seconds
+    document.body.appendChild(messageEl);
+
     setTimeout(() => {
-      messageBox.remove();
+      messageEl.remove();
     }, 3000);
   }
 });
