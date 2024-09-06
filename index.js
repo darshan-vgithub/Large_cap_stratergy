@@ -265,26 +265,29 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     };
 
+    // Add custom filters to the JSON object
     customFiltersContainer.querySelectorAll("div").forEach((filterDiv) => {
       const name = filterDiv.querySelector(".custom-filter-name").value;
+      const calendar = filterDiv.querySelector(".custom-calendar-select").value;
+      const lookupWindow = filterDiv.querySelector(
+        ".custom-look-up-window"
+      ).value;
+      const returnSize = filterDiv.querySelector(".custom-return-size").value;
+
       if (name) {
         const filter = {
           filter: name,
-          options: {},
+          options: {
+            calendar_name: calendar,
+            lookup_window: parseInt(lookupWindow),
+            return_size: parseFloat(returnSize),
+          },
         };
-
-        filterDiv.querySelectorAll("input, select").forEach((input) => {
-          const prop = input.name;
-          const value = input.value;
-          if (prop) {
-            filter.options[prop] = value;
-          }
-        });
-
         jsonObject[strategyName].filters.push(filter);
       }
     });
 
+    // Add regular filters to the JSON object
     document
       .querySelectorAll("#filters-section .form-group")
       .forEach((group) => {
