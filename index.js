@@ -256,7 +256,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelector("form").addEventListener("submit", function (ev) {
     ev.preventDefault();
 
-    const strategyName = strategyInput.value || "Finance";
+    const strategyName = strategyInput.value || "";
     const jsonObject = {
       [strategyName]: {
         class: classSelect.value || "None",
