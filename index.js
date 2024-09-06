@@ -246,10 +246,48 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   function showMessage(message, type) {
-    const messageContainer = document.getElementById("message-container");
-    messageContainer.innerHTML = `<p class="${type}">${message}</p>`;
+    const toastContainer = document.getElementById("toast-container");
+    if (!toastContainer) {
+      const container = document.createElement("div");
+      container.id = "toast-container";
+      container.style.position = "fixed";
+      container.style.top = "20px";
+      container.style.right = "20px";
+      container.style.zIndex = "1000";
+      document.body.appendChild(container);
+    }
+
+    const toast = document.createElement("div");
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+
+    // Style the toast
+    toast.style.backgroundColor = type === "success" ? "#4CAF50" : "#F44336";
+    toast.style.color = "white";
+    toast.style.padding = "12px 20px";
+    toast.style.marginBottom = "10px";
+    toast.style.borderRadius = "4px";
+    toast.style.boxShadow = "0 2px 5px rgba(0,0,0,0.2)";
+    toast.style.transition = "opacity 0.5s, transform 0.5s";
+    toast.style.opacity = "0";
+    toast.style.transform = "translateY(20px)";
+
+    document.getElementById("toast-container").appendChild(toast);
+
+    // Trigger reflow to enable transition
+    toast.offsetHeight;
+
+    // Show the toast
+    toast.style.opacity = "1";
+    toast.style.transform = "translateY(0)";
+
+    // Hide the toast after 3 seconds
     setTimeout(() => {
-      messageContainer.innerHTML = "";
+      toast.style.opacity = "0";
+      toast.style.transform = "translateY(-20px)";
+      setTimeout(() => {
+        toast.remove();
+      }, 500);
     }, 3000);
   }
 
