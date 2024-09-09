@@ -5,43 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dynamic Form Generator</title>
     <style>
-      .form-group {
-        margin-bottom: 15px;
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 20px;
       }
-      .form-input,
-      .form-select {
+      h1 {
+        color: #333;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-input {
         width: 100%;
-        padding: 8px;
+        padding: 12px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
         box-sizing: border-box;
+        font-size: 16px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+      .form-input:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
       }
       .form-button {
-        margin-top: 10px;
-        padding: 10px 15px;
+        margin-top: 20px;
+        padding: 12px 20px;
         background-color: #007bff;
         color: white;
         border: none;
+        border-radius: 5px;
         cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
       }
       .form-button:hover {
         background-color: #0056b3;
       }
+      .form-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      textarea {
+        padding: 12px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+      }
+      textarea:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+      }
     </style>
   </head>
   <body>
-    <a href="./index.html"><button class="form-button">Home</button></a>
-    <h1>Enter JSON Data</h1>
-    <textarea
-      id="json-input"
-      placeholder="Enter JSON data here"
-      rows="10"
-      style="width: 100%"
-    ></textarea>
-    <button id="generate-form" class="form-button">Generate Form</button>
+    <div class="form-container">
+      <a href="./index.html">
+        <button class="form-button">Home</button>
+      </a>
+      <h1>Enter JSON Data</h1>
+      <textarea
+        id="json-input"
+        placeholder="Enter JSON data here"
+        rows="10"
+        style="width: 100%"
+      ></textarea>
+      <button id="generate-form" class="form-button">Generate Form</button>
 
-    <form id="dynamicForm" style="margin-top: 20px">
-      <h1>Generated Form</h1>
-      <!-- Dynamically generated form fields will appear here -->
-    </form>
+      <form id="dynamicForm" style="margin-top: 20px">
+        <h1>Generated Form</h1>
+        <!-- Dynamically generated form fields will appear here -->
+      </form>
+    </div>
 
     <script>
       document
@@ -59,14 +105,7 @@
               if (jsonData.hasOwnProperty(strategyName)) {
                 const strategy = jsonData[strategyName];
 
-                // Create a section for each strategy
-                const strategySection = document.createElement("div");
-                strategySection.innerHTML = `<h2>${
-                  strategyName.charAt(0).toUpperCase() + strategyName.slice(1)
-                }</h2>`;
-                formContainer.appendChild(strategySection);
-
-                // Add input for strategy name
+                // Add input for strategy name (instead of h2 tag)
                 const strategyNameGroup = document.createElement("div");
                 strategyNameGroup.classList.add("form-group");
                 strategyNameGroup.innerHTML = `
@@ -105,10 +144,14 @@
                     const filterGroup = document.createElement("div");
                     filterGroup.classList.add("form-group");
 
+                    // Add input for filter name
                     let filterHtml = `
-                  <label for="${strategyName}_filter_${index}">Filter ${
+                    <label for="${strategyName}_filter_${index}_name">Filter ${
                       index + 1
-                    } (${filter.filter}):</label>
+                    }</label>
+                    <input type="text" id="${strategyName}_filter_${index}_name" name="${strategyName}_filter_${index}_name" class="form-input" value="${
+                      filter.filter
+                    }">
                   `;
 
                     // Loop through the options of the filter
@@ -125,15 +168,8 @@
                 }
               }
             }
-
-            // Append submit button at the end
-            const submitButton = document.createElement("button");
-            submitButton.type = "submit";
-            submitButton.classList.add("form-button");
-            submitButton.textContent = "Submit";
-            formContainer.appendChild(submitButton);
           } catch (error) {
-            alert("Invalid JSON data");
+            alert("Invalid JSON data" + error);
           }
         });
     </script>
