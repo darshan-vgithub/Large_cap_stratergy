@@ -387,6 +387,39 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   function showMessage(message, type) {
-    alert(message); // You can customize this to show a styled message or toast
+    const toastContainer = document.getElementById("toast-container");
+    if (!toastContainer) {
+      const container = document.createElement("div");
+      container.id = "toast-container";
+      container.style.position = "fixed";
+      container.style.top = "10px";
+      container.style.right = "10px";
+      container.style.zIndex = "9999";
+      document.body.appendChild(container);
+    }
+
+    const toast = document.createElement("div");
+    toast.className = `toast ${type}`;
+    toast.innerText = message;
+    toast.style.marginTop = "5px";
+    toast.style.padding = "10px";
+    toast.style.color = "#fff";
+    toast.style.backgroundColor = type === "success" ? "#4caf50" : "#f44336";
+    toast.style.borderRadius = "4px";
+    toast.style.boxShadow = "0 2px 4px rgba(0,0,0,0.2)";
+    toast.style.opacity = "0";
+    toast.style.transition = "opacity 0.5s";
+    document.getElementById("toast-container").appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.opacity = "1";
+    }, 100);
+
+    setTimeout(() => {
+      toast.style.opacity = "0";
+      setTimeout(() => {
+        toast.remove();
+      }, 500);
+    }, 3000);
   }
 });
