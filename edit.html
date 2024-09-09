@@ -3,122 +3,130 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flameback || Edit</title>
-    <link rel="stylesheet" href="index.css" />
-    <link
-      rel="shortcut icon"
-      href="./assets/logo-favicon.ico"
-      type="image/x-icon"
-    />
+    <title>Dynamic Form Generator</title>
     <style>
-      /* Basic styling for the textarea */
-      #json-output {
-        width: 100%;
-        height: 200px;
-        border: 1px solid #ddd;
-        padding: 10px;
-        box-sizing: border-box;
-        font-family: monospace;
-        white-space: pre-wrap;
-        word-break: break-all;
-        resize: vertical; /* Allows resizing vertically */
+      .form-group {
+        margin-bottom: 15px;
       }
-
-      /* Basic styling for the generated form */
-      #dynamic-form {
-        margin-top: 20px;
-        padding: 10px;
-        border: 1px solid #ddd;
+      .form-input,
+      .form-select {
         width: 100%;
+        padding: 8px;
         box-sizing: border-box;
       }
-      #dynamic-form input,
-      #dynamic-form select {
-        display: block;
-        margin-bottom: 10px;
-        padding: 5px;
-        width: 100%;
-        box-sizing: border-box;
+      .form-button {
+        margin-top: 10px;
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      .form-button:hover {
+        background-color: #0056b3;
       }
     </style>
   </head>
   <body>
     <a href="./index.html"><button class="form-button">Home</button></a>
+    <h1>Enter JSON Data</h1>
+    <textarea
+      id="json-input"
+      placeholder="Enter JSON data here"
+      rows="10"
+      style="width: 100%"
+    ></textarea>
+    <button id="generate-form" class="form-button">Generate Form</button>
 
-    <!-- JSON Textarea -->
-    <div id="json-output-container" style="margin-top: 20px">
-      <h2>JSON Output:</h2>
-      <textarea id="json-output" placeholder="Enter the JSON data"></textarea>
-    </div>
-
-    <!-- Container for the dynamically generated form -->
-    <div id="form-container"></div>
+    <form id="dynamicForm" style="margin-top: 20px">
+      <h1>Generated Form</h1>
+      <!-- Dynamically generated form fields will appear here -->
+    </form>
 
     <script>
-      function generateFormFromJson(jsonData) {
-        const formContainer = document.getElementById("form-container");
+      document
+        .getElementById("generate-form")
+        .addEventListener("click", function () {
+          const jsonInput = document.getElementById("json-input").value;
+          const formContainer = document.getElementById("dynamicForm");
+          formContainer.innerHTML = "<h1>Generated Form</h1>"; // Reset form contents
 
-        // Clear any existing content
-        formContainer.innerHTML = "";
+          try {
+            const jsonData = JSON.parse(jsonInput);
 
-        // Create a form element
-        const form = document.createElement("form");
-        form.id = "dynamic-form";
+            // Iterate through the keys in the JSON object (strategy names)
+            for (let strategyName in jsonData) {
+              if (jsonData.hasOwnProperty(strategyName)) {
+                const strategy = jsonData[strategyName];
 
-        // Generate form fields from JSON data
-        for (const key in jsonData) {
-          if (jsonData.hasOwnProperty(key)) {
-            const value = jsonData[key];
-            const label = document.createElement("label");
-            label.textContent = key;
+                // Create a section for each strategy
+                const strategySection = document.createElement("div");
+                strategySection.innerHTML = `<h2>${
+                  strategyName.charAt(0).toUpperCase() + strategyName.slice(1)
+                }</h2>`;
+                formContainer.appendChild(strategySection);
 
-            if (typeof value === "object" && !Array.isArray(value)) {
-              // Recursively generate nested forms
-              label.textContent += " (Nested Object)";
-              const nestedForm = generateFormFromJson(value);
-              form.appendChild(label);
-              form.appendChild(nestedForm);
-            } else {
-              const input = document.createElement("input");
-              input.type = "text";
-              input.name = key;
-              input.value = value;
-              form.appendChild(label);
-              form.appendChild(input);
+                // Create input for 'class' if it exists
+                if (strategy.class !== undefined) {
+                  const inputGroup = document.createElement("div");
+                  inputGroup.classList.add("form-group");
+                  inputGroup.innerHTML = `
+                <label for="${strategyName}_class">Class:</label>
+                <input type="text" id="${strategyName}_class" name="${strategyName}_class" class="form-input" value="${
+                    strategy.class || ""
+                  }">
+            `;
+                  formContainer.appendChild(inputGroup);
+                }
+
+                // Create input for 'universe'
+                if (strategy.universe !== undefined) {
+                  const inputGroup = document.createElement("div");
+                  inputGroup.classList.add("form-group");
+                  inputGroup.innerHTML = `
+                <label for="${strategyName}_universe">Universe:</label>
+                <input type="text" id="${strategyName}_universe" name="${strategyName}_universe" class="form-input" value="${strategy.universe}">
+            `;
+                  formContainer.appendChild(inputGroup);
+                }
+
+                // Handle filters if they exist
+                if (strategy.filters && Array.isArray(strategy.filters)) {
+                  strategy.filters.forEach((filter, index) => {
+                    const filterGroup = document.createElement("div");
+                    filterGroup.classList.add("form-group");
+
+                    let filterHtml = `
+                  <label for="${strategyName}_filter_${index}">Filter ${
+                      index + 1
+                    } (${filter.filter}):</label>
+                  `;
+
+                    // Loop through the options of the filter
+                    for (let optionKey in filter.options) {
+                      filterHtml += `
+                    <label for="${strategyName}_filter_${index}_${optionKey}">${optionKey}:</label>
+                    <input type="text" id="${strategyName}_filter_${index}_${optionKey}" name="${strategyName}_filter_${index}_${optionKey}" class="form-input" value="${filter.options[optionKey]}">
+                `;
+                    }
+
+                    filterGroup.innerHTML = filterHtml;
+                    formContainer.appendChild(filterGroup);
+                  });
+                }
+              }
             }
+
+            // Append submit button at the end
+            const submitButton = document.createElement("button");
+            submitButton.type = "submit";
+            submitButton.classList.add("form-button");
+            submitButton.textContent = "Submit";
+            formContainer.appendChild(submitButton);
+          } catch (error) {
+            alert("Invalid JSON data");
           }
-        }
-
-        // Create a submit button
-        const submitButton = document.createElement("button");
-        submitButton.type = "submit";
-        submitButton.textContent = "Submit";
-
-        // Handle form submission
-        form.addEventListener("submit", function (event) {
-          event.preventDefault();
-          const formData = new FormData(form);
-          const formObject = {};
-          formData.forEach((value, key) => {
-            formObject[key] = value;
-          });
-          console.log("Form Submitted:", JSON.stringify(formObject, null, 2));
         });
-
-        form.appendChild(submitButton);
-        formContainer.appendChild(form);
-      }
-
-      // Listen for changes in the JSON textarea
-      const jsonOutput = document.getElementById("json-output");
-      jsonOutput.addEventListener("input", function () {
-        try {
-          const jsonData = JSON.parse(jsonOutput.value);
-          generateFormFromJson(jsonData);
-        } catch (e) {
-          console.error("Invalid JSON:", e);
-        }
-      });
     </script>
   </body>
 </html>
