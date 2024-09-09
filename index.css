@@ -138,6 +138,20 @@ h1 {
   word-wrap: break-word; /* Ensure long lines break properly */
 }
 
+.copy-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.copy-button img {
+  width: 24px;
+  height: 24px;
+}
+
 /* Responsive Styles for screens with max-width 1024px */
 @media only screen and (max-width: 1024px) {
   .form-container {

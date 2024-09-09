@@ -10,6 +10,11 @@
       href="./assets/logo-favicon.ico"
       type="image/x-icon"
     />
+    <!-- Include Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
   </head>
   <body>
     <div class="form-container">
@@ -56,10 +61,25 @@
       </form>
       <div id="json-output-container" style="margin-top: 20px">
         <h2>JSON Output:</h2>
-        <pre
+        <div
           id="json-output"
-          style="white-space: pre-wrap; word-break: break-all"
-        ></pre>
+          style="
+            white-space: pre-wrap;
+            word-break: break-all;
+            border: 1px solid #ddd;
+            padding: 10px;
+          "
+        >
+          <!-- Your JSON output will be here -->
+        </div>
+        <!-- Copy Button with Font Awesome Icon -->
+        <button
+          id="copy-json"
+          class="copy-button"
+          style="background: none; border: none; cursor: pointer; color: #333"
+        >
+          <i class="fa-solid fa-copy" style="font-size: 24px"></i>
+        </button>
       </div>
     </div>
     <script src="index.js"></script>

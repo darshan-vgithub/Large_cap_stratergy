@@ -353,4 +353,40 @@ document.addEventListener("DOMContentLoaded", function () {
       2
     );
   });
+  const copyButton = document.getElementById("copy-json");
+  const jsonOutput = document.getElementById("json-output");
+
+  copyButton.addEventListener("click", function () {
+    // Use the Clipboard API if available
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(jsonOutput.textContent).then(
+        () => {
+          showMessage("Copied to clipboard!", "success");
+        },
+        (err) => {
+          console.error("Failed to copy: ", err);
+        }
+      );
+    } else {
+      // Fallback for older browsers
+      const range = document.createRange();
+      range.selectNode(jsonOutput);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      try {
+        document.execCommand("copy");
+        showMessage("Copied to clipboard!", "success");
+      } catch (err) {
+        console.error("Failed to copy: ", err);
+      }
+
+      selection.removeAllRanges();
+    }
+  });
+
+  function showMessage(message, type) {
+    alert(message); // You can customize this to show a styled message or toast
+  }
 });
