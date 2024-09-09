@@ -66,6 +66,15 @@
                 }</h2>`;
                 formContainer.appendChild(strategySection);
 
+                // Add input for strategy name
+                const strategyNameGroup = document.createElement("div");
+                strategyNameGroup.classList.add("form-group");
+                strategyNameGroup.innerHTML = `
+                  <label for="${strategyName}_name">Strategy Name:</label>
+                  <input type="text" id="${strategyName}_name" name="${strategyName}_name" class="form-input" value="${strategyName}">
+                `;
+                formContainer.appendChild(strategyNameGroup);
+
                 // Create input for 'class' if it exists
                 if (strategy.class !== undefined) {
                   const inputGroup = document.createElement("div");
