@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flameback||Edit</title>
+    <title>Flameback || Edit</title>
     <link rel="stylesheet" href="index.css" />
     <link
       rel="shortcut icon"
@@ -11,7 +11,7 @@
       type="image/x-icon"
     />
     <style>
-      /* Add some basic styling for the textarea */
+      /* Basic styling for the textarea */
       #json-output {
         width: 100%;
         height: 200px;
@@ -23,13 +23,102 @@
         word-break: break-all;
         resize: vertical; /* Allows resizing vertically */
       }
+
+      /* Basic styling for the generated form */
+      #dynamic-form {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      #dynamic-form input,
+      #dynamic-form select {
+        display: block;
+        margin-bottom: 10px;
+        padding: 5px;
+        width: 100%;
+        box-sizing: border-box;
+      }
     </style>
   </head>
   <body>
     <a href="./index.html"><button class="form-button">Home</button></a>
+
+    <!-- JSON Textarea -->
     <div id="json-output-container" style="margin-top: 20px">
       <h2>JSON Output:</h2>
-      <textarea id="json-output" placeholder="Enter the json data"></textarea>
+      <textarea id="json-output" placeholder="Enter the JSON data"></textarea>
     </div>
+
+    <!-- Container for the dynamically generated form -->
+    <div id="form-container"></div>
+
+    <script>
+      function generateFormFromJson(jsonData) {
+        const formContainer = document.getElementById("form-container");
+
+        // Clear any existing content
+        formContainer.innerHTML = "";
+
+        // Create a form element
+        const form = document.createElement("form");
+        form.id = "dynamic-form";
+
+        // Generate form fields from JSON data
+        for (const key in jsonData) {
+          if (jsonData.hasOwnProperty(key)) {
+            const value = jsonData[key];
+            const label = document.createElement("label");
+            label.textContent = key;
+
+            if (typeof value === "object" && !Array.isArray(value)) {
+              // Recursively generate nested forms
+              label.textContent += " (Nested Object)";
+              const nestedForm = generateFormFromJson(value);
+              form.appendChild(label);
+              form.appendChild(nestedForm);
+            } else {
+              const input = document.createElement("input");
+              input.type = "text";
+              input.name = key;
+              input.value = value;
+              form.appendChild(label);
+              form.appendChild(input);
+            }
+          }
+        }
+
+        // Create a submit button
+        const submitButton = document.createElement("button");
+        submitButton.type = "submit";
+        submitButton.textContent = "Submit";
+
+        // Handle form submission
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+          const formData = new FormData(form);
+          const formObject = {};
+          formData.forEach((value, key) => {
+            formObject[key] = value;
+          });
+          console.log("Form Submitted:", JSON.stringify(formObject, null, 2));
+        });
+
+        form.appendChild(submitButton);
+        formContainer.appendChild(form);
+      }
+
+      // Listen for changes in the JSON textarea
+      const jsonOutput = document.getElementById("json-output");
+      jsonOutput.addEventListener("input", function () {
+        try {
+          const jsonData = JSON.parse(jsonOutput.value);
+          generateFormFromJson(jsonData);
+        } catch (e) {
+          console.error("Invalid JSON:", e);
+        }
+      });
+    </script>
   </body>
 </html>
