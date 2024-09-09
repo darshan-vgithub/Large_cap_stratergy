@@ -5,22 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Flameback||Edit</title>
     <link rel="stylesheet" href="index.css" />
-    <link rel="shortcut icon" href="./assets/logo-favicon.ico" type="image/x-icon">
+    <link
+      rel="shortcut icon"
+      href="./assets/logo-favicon.ico"
+      type="image/x-icon"
+    />
+    <style>
+      /* Add some basic styling for the textarea */
+      #json-output {
+        width: 100%;
+        height: 200px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        box-sizing: border-box;
+        font-family: monospace;
+        white-space: pre-wrap;
+        word-break: break-all;
+        resize: vertical; /* Allows resizing vertically */
+      }
+    </style>
   </head>
   <body>
     <a href="./index.html"><button class="form-button">Home</button></a>
-     <div id="json-output-container" style="margin-top: 20px">
-        <h2>JSON Output:</h2>
-        <div
-          id="json-output"
-          style="
-            white-space: pre-wrap;
-            word-break: break-all;
-            border: 1px solid #ddd;
-            padding: 10px;
-          "
-        >
-          <!-- Your JSON output will be here -->
-        </div>
+    <div id="json-output-container" style="margin-top: 20px">
+      <h2>JSON Output:</h2>
+      <textarea id="json-output" placeholder="Enter the json data"></textarea>
+    </div>
   </body>
 </html>
