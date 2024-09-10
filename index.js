@@ -416,7 +416,6 @@ document.addEventListener("DOMContentLoaded", function () {
       .forEach((group) => group.remove());
     customFiltersContainer.innerHTML = "";
 
-    // Load data into form fields
     if (jsonObject) {
       const strategyName = Object.keys(jsonObject)[0];
       const data = jsonObject[strategyName];
@@ -426,6 +425,7 @@ document.addEventListener("DOMContentLoaded", function () {
       classSelect.value = data.class;
       classSelect.dispatchEvent(new Event("change"));
 
+      // Handle regular filters
       data.filters.forEach((filter) => {
         if (filter.filter) {
           // Add regular filters
@@ -469,18 +469,18 @@ document.addEventListener("DOMContentLoaded", function () {
           customFilterDiv.style.backgroundColor = "#f9f9f9";
 
           customFilterDiv.innerHTML = `
-            <label style="display: block; margin-bottom: 5px;">Custom Filter Name:</label>
-            <input type="text" class="custom-filter-name" placeholder="Filter Name" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-            <label style="display: block; margin: 10px 0 5px;">Calendar:</label>
-            <select class="custom-calendar-select" style="width: 100%; padding: 8px; box-sizing: border-box;">
-              <option value="">Select Calendar</option>
-            </select>
-            <label style="display: block; margin: 10px 0 5px;">Look up window:</label>
-            <input type="number" class="custom-look-up-window" placeholder="Look up window" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-            <label style="display: block; margin: 10px 0 5px;">Return size:</label>
-            <input type="number" class="custom-return-size" placeholder="Return size" style="width: 100%; padding: 8px; box-sizing: border-box;" />
-            <button class="remove-custom-filter" style="margin-top: 10px; padding: 8px 12px; background-color: #f44336; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Remove</button>
-          `;
+          <label style="display: block; margin-bottom: 5px;">Custom Filter Name:</label>
+          <input type="text" class="custom-filter-name" placeholder="Filter Name" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+          <label style="display: block; margin: 10px 0 5px;">Calendar:</label>
+          <select class="custom-calendar-select" style="width: 100%; padding: 8px; box-sizing: border-box;">
+            <option value="">Select Calendar</option>
+          </select>
+          <label style="display: block; margin: 10px 0 5px;">Look up window:</label>
+          <input type="number" class="custom-look-up-window" placeholder="Look up window" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+          <label style="display: block; margin: 10px 0 5px;">Return size:</label>
+          <input type="number" class="custom-return-size" placeholder="Return size" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+          <button class="remove-custom-filter" style="margin-top: 10px; padding: 8px 12px; background-color: #f44336; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Remove</button>
+        `;
 
           const calendarSelect = customFilterDiv.querySelector(
             ".custom-calendar-select"
