@@ -171,6 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const el = filterDefaultDiv.cloneNode(true);
     el.id = "filter-" + new Date().getTime();
     el.style.display = "block";
+    debugger;
 
     const selectEl = el.querySelector("select");
     selectEl.addEventListener("change", filterTypeSelected);
@@ -398,9 +399,14 @@ document.addEventListener("DOMContentLoaded", function () {
         jsonOutputTextarea.style.padding = "0";
         try {
           const updatedJson = JSON.parse(jsonOutputTextarea.value);
-          loadJSONData(updatedJson);
-          showMessage("JSON data updated!", "success");
+          if (validateJSON(updatedJson)) {
+            loadJSONData(updatedJson);
+            showMessage("JSON data updated!", "success");
+          } else {
+            showMessage("Invalid JSON data.", "error");
+          }
         } catch (e) {
+          console.error("JSON parsing error: ", e);
           showMessage("Invalid JSON data.", "error");
         }
       }
@@ -409,11 +415,29 @@ document.addEventListener("DOMContentLoaded", function () {
     console.error("Edit button not found!");
   }
 
+  function validateJSON(jsonObject) {
+    // Basic validation to check if the JSON structure is correct
+    if (typeof jsonObject !== "object" || jsonObject === null) {
+      return false;
+    }
+    const strategyName = Object.keys(jsonObject)[0];
+    if (!strategyName || typeof jsonObject[strategyName] !== "object") {
+      return false;
+    }
+    const data = jsonObject[strategyName];
+    if (!data.class || !data.universe || !Array.isArray(data.filters)) {
+      return false;
+    }
+    return true;
+  }
+
   function loadJSONData(jsonObject) {
     // Clear existing filters
-    document
-      .querySelectorAll("#filters-section .form-group")
-      .forEach((group) => group.remove());
+    document.getElementById("filters-section").childNodes.forEach((o) => {
+      if (o.id !== "filter-default") {
+        o.remove();
+      }
+    });
     customFiltersContainer.innerHTML = "";
 
     if (jsonObject) {
