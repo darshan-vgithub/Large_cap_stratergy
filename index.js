@@ -128,6 +128,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const customFiltersContainer = document.getElementById(
     "custom-filters-container"
   );
+  const editButton = document.getElementById("edit");
+  const jsonOutputTextarea = document.getElementById("json-output");
 
   settings.universes.forEach((o) => {
     const el = document.createElement("option");
@@ -251,40 +253,31 @@ document.addEventListener("DOMContentLoaded", function () {
       const container = document.createElement("div");
       container.id = "toast-container";
       container.style.position = "fixed";
-      container.style.top = "20px";
-      container.style.right = "20px";
-      container.style.zIndex = "1000";
+      container.style.top = "10px";
+      container.style.right = "10px";
+      container.style.zIndex = "9999";
       document.body.appendChild(container);
     }
 
     const toast = document.createElement("div");
     toast.className = `toast ${type}`;
-    toast.textContent = message;
-
-    // Style the toast
-    toast.style.backgroundColor = type === "success" ? "#4CAF50" : "#F44336";
-    toast.style.color = "white";
-    toast.style.padding = "12px 20px";
-    toast.style.marginBottom = "10px";
+    toast.innerText = message;
+    toast.style.marginTop = "5px";
+    toast.style.padding = "10px";
+    toast.style.color = "#fff";
+    toast.style.backgroundColor = type === "success" ? "#4caf50" : "#f44336";
     toast.style.borderRadius = "4px";
-    toast.style.boxShadow = "0 2px 5px rgba(0,0,0,0.2)";
-    toast.style.transition = "opacity 0.5s, transform 0.5s";
+    toast.style.boxShadow = "0 2px 4px rgba(0,0,0,0.2)";
     toast.style.opacity = "0";
-    toast.style.transform = "translateY(20px)";
-
+    toast.style.transition = "opacity 0.5s";
     document.getElementById("toast-container").appendChild(toast);
 
-    // Trigger reflow to enable transition
-    toast.offsetHeight;
+    setTimeout(() => {
+      toast.style.opacity = "1";
+    }, 100);
 
-    // Show the toast
-    toast.style.opacity = "1";
-    toast.style.transform = "translateY(0)";
-
-    // Hide the toast after 3 seconds
     setTimeout(() => {
       toast.style.opacity = "0";
-      toast.style.transform = "translateY(-20px)";
       setTimeout(() => {
         toast.remove();
       }, 500);
@@ -353,6 +346,7 @@ document.addEventListener("DOMContentLoaded", function () {
       2
     );
   });
+
   const copyButton = document.getElementById("copy-json");
   const jsonOutput = document.getElementById("json-output");
 
@@ -386,40 +380,145 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  function showMessage(message, type) {
-    const toastContainer = document.getElementById("toast-container");
-    if (!toastContainer) {
-      const container = document.createElement("div");
-      container.id = "toast-container";
-      container.style.position = "fixed";
-      container.style.top = "10px";
-      container.style.right = "10px";
-      container.style.zIndex = "9999";
-      document.body.appendChild(container);
+  if (editButton) {
+    editButton.addEventListener("click", function () {
+      if (editButton.textContent === "Edit") {
+        // Switch to Edit mode
+        editButton.textContent = "Save";
+        jsonOutputTextarea.removeAttribute("readonly");
+        jsonOutputTextarea.style.backgroundColor = "#fff";
+        jsonOutputTextarea.style.border = "1px solid #ccc";
+        jsonOutputTextarea.style.padding = "10px";
+      } else {
+        // Switch to Save mode
+        editButton.textContent = "Edit";
+        jsonOutputTextarea.setAttribute("readonly", true);
+        jsonOutputTextarea.style.backgroundColor = "#f5f5f5";
+        jsonOutputTextarea.style.border = "none";
+        jsonOutputTextarea.style.padding = "0";
+        try {
+          const updatedJson = JSON.parse(jsonOutputTextarea.value);
+          loadJSONData(updatedJson);
+          showMessage("JSON data updated!", "success");
+        } catch (e) {
+          showMessage("Invalid JSON data.", "error");
+        }
+      }
+    });
+  } else {
+    console.error("Edit button not found!");
+  }
+
+  function loadJSONData(jsonObject) {
+    // Clear existing filters
+    document
+      .querySelectorAll("#filters-section .form-group")
+      .forEach((group) => group.remove());
+    customFiltersContainer.innerHTML = "";
+
+    // Load data into form fields
+    if (jsonObject) {
+      const strategyName = Object.keys(jsonObject)[0];
+      const data = jsonObject[strategyName];
+
+      strategyInput.value = strategyName;
+      universeSelect.value = data.universe;
+      classSelect.value = data.class;
+      classSelect.dispatchEvent(new Event("change"));
+
+      data.filters.forEach((filter) => {
+        if (filter.filter) {
+          // Add regular filters
+          const filterDiv = filterDefaultDiv.cloneNode(true);
+          filterDiv.id = "filter-" + new Date().getTime();
+          filterDiv.style.display = "block";
+
+          const selectEl = filterDiv.querySelector("select");
+          selectEl.value = settings.filters.find(
+            (f) => f.class === filter.filter
+          ).label;
+          selectEl.dispatchEvent(new Event("change"));
+
+          filter.options &&
+            Object.keys(filter.options).forEach((key) => {
+              const inputEl = filterDiv.querySelector(`[name=${key}]`);
+              if (inputEl) {
+                inputEl.value = filter.options[key];
+              }
+            });
+
+          const deleteButton = document.createElement("button");
+          deleteButton.innerText = "Delete";
+          deleteButton.className = "form-button delete";
+          deleteButton.style.marginLeft = "10px";
+          deleteButton.type = "button";
+          deleteButton.onclick = () => {
+            filterDiv.remove();
+            showMessage("Filter deleted.", "info");
+          };
+          filterDiv.appendChild(deleteButton);
+
+          filtersSection.prepend(filterDiv);
+        } else if (filter.filter === "") {
+          // Add custom filters
+          const customFilterDiv = document.createElement("div");
+          customFilterDiv.style.margin = "10px 0";
+          customFilterDiv.style.padding = "10px";
+          customFilterDiv.style.border = "1px solid #ccc";
+          customFilterDiv.style.borderRadius = "5px";
+          customFilterDiv.style.backgroundColor = "#f9f9f9";
+
+          customFilterDiv.innerHTML = `
+            <label style="display: block; margin-bottom: 5px;">Custom Filter Name:</label>
+            <input type="text" class="custom-filter-name" placeholder="Filter Name" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+            <label style="display: block; margin: 10px 0 5px;">Calendar:</label>
+            <select class="custom-calendar-select" style="width: 100%; padding: 8px; box-sizing: border-box;">
+              <option value="">Select Calendar</option>
+            </select>
+            <label style="display: block; margin: 10px 0 5px;">Look up window:</label>
+            <input type="number" class="custom-look-up-window" placeholder="Look up window" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+            <label style="display: block; margin: 10px 0 5px;">Return size:</label>
+            <input type="number" class="custom-return-size" placeholder="Return size" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+            <button class="remove-custom-filter" style="margin-top: 10px; padding: 8px 12px; background-color: #f44336; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Remove</button>
+          `;
+
+          const calendarSelect = customFilterDiv.querySelector(
+            ".custom-calendar-select"
+          );
+          settings.calendars.forEach((calendar) => {
+            const option = document.createElement("option");
+            option.value = calendar;
+            option.innerHTML = calendar;
+            calendarSelect.appendChild(option);
+          });
+
+          const customFilterName = customFilterDiv.querySelector(
+            ".custom-filter-name"
+          );
+          const customCalendarSelect = customFilterDiv.querySelector(
+            ".custom-calendar-select"
+          );
+          const customLookUpWindow = customFilterDiv.querySelector(
+            ".custom-look-up-window"
+          );
+          const customReturnSize = customFilterDiv.querySelector(
+            ".custom-return-size"
+          );
+
+          customFilterName.value = filter.filter;
+          customCalendarSelect.value = filter.options.calendar_name;
+          customLookUpWindow.value = filter.options.lookup_window;
+          customReturnSize.value = filter.options.return_size;
+
+          customFilterDiv.querySelector(".remove-custom-filter").onclick =
+            () => {
+              customFilterDiv.remove();
+              showMessage("Custom filter removed.", "info");
+            };
+
+          customFiltersContainer.appendChild(customFilterDiv);
+        }
+      });
     }
-
-    const toast = document.createElement("div");
-    toast.className = `toast ${type}`;
-    toast.innerText = message;
-    toast.style.marginTop = "5px";
-    toast.style.padding = "10px";
-    toast.style.color = "#fff";
-    toast.style.backgroundColor = type === "success" ? "#4caf50" : "#f44336";
-    toast.style.borderRadius = "4px";
-    toast.style.boxShadow = "0 2px 4px rgba(0,0,0,0.2)";
-    toast.style.opacity = "0";
-    toast.style.transition = "opacity 0.5s";
-    document.getElementById("toast-container").appendChild(toast);
-
-    setTimeout(() => {
-      toast.style.opacity = "1";
-    }, 100);
-
-    setTimeout(() => {
-      toast.style.opacity = "0";
-      setTimeout(() => {
-        toast.remove();
-      }, 500);
-    }, 3000);
   }
 });
